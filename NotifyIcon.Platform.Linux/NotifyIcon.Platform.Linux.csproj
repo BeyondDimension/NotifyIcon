@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>System.Windows.NotifyIcon.Linux</AssemblyName>
+    <RootNamespace>System.Windows</RootNamespace>
+    <AssemblyOriginatorKeyFile>..\NotifyIcon.snk</AssemblyOriginatorKeyFile>
+    <Description>在通知区域创建图标的组件的 Linux 实现。</Description>
+    <PackageId>NotifyIcon.Linux</PackageId>
+    <DefineConstants>LINUX;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) OR $(TargetFramework.StartsWith('Xamarin.Mac20')) OR '$(TargetFramework)' == 'net461' ">
+    <DefineConstants>DI;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\NotifyIcon\NotifyIconExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GtkSharp" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(DefineConstants.Contains('DI')) ">
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+  </ItemGroup>
+</Project>
