@@ -1,10 +1,19 @@
 <Project>
   <ItemGroup>
     <PackageVersion Include="MonoMac.NetStandard" Version="0.0.4" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageVersion Include="OperatingSystem2" Version="1.1.0" />
     <PackageVersion Include="GtkSharp" Version="3.24.24.34" />
     <PackageVersion Include="System.Drawing.Common" Version="5.0.2" />
     <PackageVersion Include="Microsoft.Win32.Primitives" Version="4.3.0" />
+    <PackageVersion Include="ReactiveUI" Version="16.2.1" />
+    <PackageVersion Include="Avalonia" Version="0.10.7" />
+    <PackageVersion Include="Avalonia.Desktop" Version="0.10.7" />
+    <PackageVersion Include="Avalonia.Diagnostics" Version="0.10.7" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(DefineConstants.Contains('DI_1')) ">
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" !$(DefineConstants.Contains('DI_1')) ">
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
   </ItemGroup>
 </Project>

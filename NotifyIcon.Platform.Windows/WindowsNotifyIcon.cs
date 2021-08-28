@@ -1,4 +1,4 @@
-﻿#if !XAMARIN_MAC && !__MACOS__ && !NET6_0_MACOS10_14
+#if !XAMARIN_MAC && !__MACOS__ && !NET6_0_MACOS10_14 && !NETSTANDARD1_0 && !NETSTANDARD1_1
 #if NET5_0_OR_GREATER
 using System.Runtime.Versioning;
 #endif
@@ -18,10 +18,11 @@ namespace System.Windows
 #endif
     internal sealed class WindowsNotifyIcon : NotifyIcon
     {
-        readonly int _uID = 0;
+        readonly int _uID;
         readonly NativeWindow _window;
-        static int _nextUID = 0;
+        static int _nextUID;
         bool _iconAdded;
+        IntPtr popupMenu;
 
         /// <summary>
         /// Represents the current icon data.
@@ -40,10 +41,44 @@ namespace System.Windows
                 uCallbackMessage = (int)CustomWindowsMessage.WM_TRAYMOUSE,
                 hIcon = IntPtr.Zero,
                 uTimeoutOrVersion = 0,
+                szTip = string.Empty,
             };
         }
 
         IntPtr _iconHandle;
+        Icon? _icon;
+        Bitmap? _iconBitmap;
+
+        void SetIcon(Icon value)
+        {
+            if (_iconBitmap != null)
+            {
+                _iconBitmap.Dispose();
+                _iconBitmap = null;
+            }
+            if (_icon != null)
+            {
+                _icon.Dispose();
+            }
+            _icon = value;
+            _iconHandle = value.Handle;
+        }
+
+        void SetIcon(Bitmap value)
+        {
+            if (_icon != null)
+            {
+                _icon.Dispose();
+                _icon = null;
+            }
+            if (_iconBitmap != null)
+            {
+                _iconBitmap.Dispose();
+            }
+            _iconBitmap = value;
+            _iconHandle = value.GetHicon();
+        }
+
         public override object? Icon
         {
             set
@@ -55,11 +90,11 @@ namespace System.Windows
 #if DRAWING || NETFRAMEWORK
                 else if (value is Icon icon)
                 {
-                    _iconHandle = icon.Handle;
+                    SetIcon(icon);
                 }
                 else if (value is Bitmap bitmap)
                 {
-                    _iconHandle = bitmap.GetHicon();
+                    SetIcon(bitmap);
                 }
 #endif
                 else
@@ -67,19 +102,20 @@ namespace System.Windows
 #if DRAWING || NETFRAMEWORK
                     if (value is byte[] byteArray)
                     {
-                        _iconHandle = new Icon(new MemoryStream(byteArray)).Handle;
+                        using var ms = new MemoryStream(byteArray);
+                        SetIcon(new Icon(ms));
                     }
-                    if (value is Stream stream)
+                    else if (value is Stream stream)
                     {
-                        _iconHandle = new Icon(stream).Handle;
+                        SetIcon(new Icon(stream));
                     }
                     else if (value is string fileName)
                     {
-                        _iconHandle = new Icon(fileName).Handle;
+                        SetIcon(new Icon(fileName));
                     }
                     else if (value is FileInfo fileInfo)
                     {
-                        _iconHandle = new Icon(fileInfo.FullName).Handle;
+                        SetIcon(new Icon(fileInfo.FullName));
                     }
                     else
                     {
@@ -107,7 +143,7 @@ namespace System.Windows
             }
         }
 
-        bool _visible;
+        bool _visible = true;
         public override bool Visible
         {
             get => _visible;
@@ -138,8 +174,8 @@ namespace System.Windows
             public IntPtr hIcon;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
             public string? szTip;
-            public int dwState = 0;
-            public int dwStateMask = 0;
+            public int dwState;
+            public int dwStateMask;
             /// <summary>
             /// String with the text for a balloon ToolTip. It can have a maximum of 255 characters.
             /// To remove the ToolTip, set the NIF_INFO flag in uFlags and set szInfo to an empty string.
@@ -155,14 +191,14 @@ namespace System.Windows
             public string szInfoTitle;
             public NIIF dwInfoFlags;
 
-            /// <summary>
-            /// Windows Vista (Shell32.dll version 6.0.6) and later. The handle of a customized
-            /// balloon icon provided by the application that should be used independently
-            /// of the tray icon. If this member is non-NULL and the <see cref="NIIF.USER"/>
-            /// flag is set, this icon is used as the balloon icon.<br/>
-            /// If this member is NULL, the legacy behavior is carried out.
-            /// </summary>
-            public IntPtr CustomBalloonIconHandle;
+            ///// <summary>
+            ///// Windows Vista (Shell32.dll version 6.0.6) and later. The handle of a customized
+            ///// balloon icon provided by the application that should be used independently
+            ///// of the tray icon. If this member is non-NULL and the <see cref="NIIF.USER"/>
+            ///// flag is set, this icon is used as the balloon icon.<br/>
+            ///// If this member is NULL, the legacy behavior is carried out.
+            ///// </summary>
+            //public IntPtr CustomBalloonIconHandle;
         }
 #pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑声明为可以为 null。
 
@@ -246,40 +282,40 @@ namespace System.Windows
             }
         }
 
-        void ShowBalloonTip(string? tipTitle, string? tipText, NIIF flags = NIIF.NONE, IntPtr balloonIconHandle = default)
+        void ShowBalloonTip(string? tipTitle, string? tipText, NIIF flags = NIIF.NONE/*, IntPtr balloonIconHandle = default*/)
         {
             if (iconData != null)
             {
                 iconData.szInfo = tipTitle ?? string.Empty;
                 iconData.szInfoTitle = tipText ?? string.Empty;
                 iconData.uFlags |= NIF.INFO;
-                iconData.CustomBalloonIconHandle = balloonIconHandle;
+                //iconData.CustomBalloonIconHandle = balloonIconHandle;
                 iconData.dwInfoFlags = flags;
                 Shell_NotifyIcon(NIM.MODIFY, iconData);
             }
         }
 
-        internal void ShowBalloonTip(string tipTitle, string tipText, IntPtr balloonIcon, bool largeIcon)
-        {
-            NIIF flags;
-            if (balloonIcon == default)
-            {
-                flags = NIIF.NONE;
-            }
-            else
-            {
-                flags = NIIF.USER;
-                if (largeIcon)
-                {
-                    flags |= NIIF.LARGE_ICON;
-                }
-            }
-            ShowBalloonTip(tipTitle, tipText, flags, balloonIcon);
-        }
+        //internal void ShowBalloonTip(string tipTitle, string tipText, IntPtr balloonIcon, bool largeIcon)
+        //{
+        //    NIIF flags;
+        //    if (balloonIcon == default)
+        //    {
+        //        flags = NIIF.NONE;
+        //    }
+        //    else
+        //    {
+        //        flags = NIIF.USER;
+        //        if (largeIcon)
+        //        {
+        //            flags |= NIIF.LARGE_ICON;
+        //        }
+        //    }
+        //    ShowBalloonTip(tipTitle, tipText, flags, balloonIcon);
+        //}
 
         public override void ShowBalloonTip(string tipTitle, string tipText, ToolTipIcon tipIcon)
         {
-            NIIF flags = tipIcon switch
+            var flags = tipIcon switch
             {
                 ToolTipIcon.None => NIIF.NONE,
                 ToolTipIcon.Info => NIIF.INFO,
@@ -287,7 +323,7 @@ namespace System.Windows
                 ToolTipIcon.Error => NIIF.ERROR,
                 _ => throw new ArgumentOutOfRangeException(nameof(tipIcon), tipIcon, null),
             };
-            ShowBalloonTip(tipTitle, tipText, flags, default);
+            ShowBalloonTip(tipTitle, tipText, flags/*, default*/);
         }
 
         public override void HideBalloonTip()
@@ -300,11 +336,12 @@ namespace System.Windows
             }
         }
 
-        sealed class NativeWindow
+        sealed class NativeWindow : IDisposable
         {
             readonly WndProc wndProc;
             readonly WndProc _wndProc;
             readonly string _className = "NativeHelperWindow" + Guid.NewGuid();
+            bool disposedValue;
 
             /// <summary>
             /// The window handle of the underlying native window.
@@ -351,17 +388,6 @@ namespace System.Windows
             }
 
             /// <summary>
-            /// Destructs the object and destroys the native window.
-            /// </summary>
-            ~NativeWindow()
-            {
-                if (Handle != IntPtr.Zero)
-                {
-                    PostMessage(Handle, (uint)WindowsMessage.WM_DESTROY, IntPtr.Zero, IntPtr.Zero);
-                }
-            }
-
-            /// <summary>
             /// This function will receive all the system window messages relevant to our window.
             /// </summary>
             IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
@@ -380,6 +406,42 @@ namespace System.Windows
                         return DefWindowProc(hWnd, msg, wParam, lParam);
                 }
                 return default;
+            }
+
+            private void Dispose(bool disposing)
+            {
+                if (!disposedValue)
+                {
+                    if (disposing)
+                    {
+                        // TODO: 释放托管状态(托管对象)
+                    }
+
+                    // TODO: 释放未托管的资源(未托管的对象)并重写终结器
+                    // TODO: 将大型字段设置为 null
+                    disposedValue = true;
+                }
+            }
+
+            // TODO: 仅当“Dispose(bool disposing)”拥有用于释放未托管资源的代码时才替代终结器
+            /// <summary>
+            /// Destructs the object and destroys the native window.
+            /// </summary>
+            ~NativeWindow()
+            {
+                if (Handle != default)
+                {
+                    PostMessage(Handle, (uint)WindowsMessage.WM_DESTROY, IntPtr.Zero, IntPtr.Zero);
+                }
+                // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
+                Dispose(disposing: false);
+            }
+
+            public void Dispose()
+            {
+                // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
+                Dispose(disposing: true);
+                GC.SuppressFinalize(this);
             }
         }
 
@@ -472,13 +534,13 @@ namespace System.Windows
                             case (int)WindowsMessage.WM_LBUTTONUP:
                                 if (!_doubleClick)
                                 {
-                                    Click?.Invoke(this, new());
+                                    Click?.Invoke(this, EventArgs.Empty);
                                 }
                                 _doubleClick = false;
                                 break;
 
                             case (int)WindowsMessage.WM_LBUTTONDBLCLK:
-                                DoubleClick?.Invoke(this, new());
+                                DoubleClick?.Invoke(this, EventArgs.Empty);
                                 _doubleClick = true;
                                 break;
 
@@ -518,19 +580,40 @@ namespace System.Windows
         [DllImport("user32.dll", CharSet = CharSet.Auto, EntryPoint = "GetCursorPos")]
         static extern bool GetCursorPos(out PointInt32 pt);
 
+        void DestroyMenu()
+        {
+            if (popupMenu != default)
+            {
+                DestroyMenu(popupMenu);
+                popupMenu = default;
+            }
+        }
+
         void ShowContextMenu()
         {
+            DestroyMenu();
+
             if (!ContextMenuStrip.Items.Any()) return;
 
+            // Since we can't use the Avalonia ContextMenu directly due to shortcomings
+            // regrading its positioning, we'll create a native context menu instead.
+            // This dictionary will map the menu item IDs which we'll need for the native
+            // menu to the MenuItems of the provided Avalonia ContextMenu.
             Dictionary<uint, Action> contextItemLookup = new();
 
             // Create a native (Win32) popup menu as the notify icon's context menu.
-            var popupMenu = CreatePopupMenu();
+            popupMenu = CreatePopupMenu();
 
             uint i = 1;
             foreach (var item in ContextMenuStrip.Items)
             {
+                // Add items to the native context menu by simply reusing
+                // the information provided within the Avalonia ContextMenu.
                 AppendMenu(popupMenu, MenuFlags.MF_STRING, i, item.Text ?? string.Empty);
+
+                // Add the mapping so that we can find the selected item later
+                contextItemLookup.Add(i,
+                    () => OnContextMenuItemClick(item, this, EventArgs.Empty));
                 i++;
             }
 
@@ -545,6 +628,8 @@ namespace System.Windows
             // Get the mouse cursor position
             GetCursorPos(out var pt);
 
+            OnContextMenuPopup(this, EventArgs.Empty);
+
             // Now display the context menu and block until we get a result
             uint commandId = TrackPopupMenuEx(
                 popupMenu,
@@ -554,10 +639,15 @@ namespace System.Windows
                 UFLAGS.TPM_RETURNCMD,
                 pt.X, pt.Y, _window.Handle, IntPtr.Zero);
 
+            OnContextMenuCollapse(this, EventArgs.Empty);
+
             // If we have a result, execute the corresponding command
             if (commandId != 0)
             {
-                contextItemLookup[commandId]();
+                if (contextItemLookup.ContainsKey(commandId))
+                {
+                    contextItemLookup[commandId]();
+                }
             }
         }
 
@@ -582,8 +672,11 @@ namespace System.Windows
         [DllImport("user32.dll")]
         static extern uint TrackPopupMenuEx(IntPtr hmenu, UFLAGS uFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
 
+        [DllImport("user32.dll")]
+        static extern bool DestroyMenu(IntPtr hmenu);
+
         [Flags]
-        public enum UFLAGS : uint
+        enum UFLAGS : uint
         {
             TPM_LEFTALIGN = 0x0000,
             TPM_CENTERALIGN = 0x0004,
@@ -595,6 +688,37 @@ namespace System.Windows
             TPM_VERTICAL = 0x0040,
             TPM_NONOTIFY = 0x0080,
             TPM_RETURNCMD = 0x0100
+        }
+
+        bool disposedValue;
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: 释放托管状态(托管对象)
+                    _iconHandle = default;
+                    if (_iconBitmap != null)
+                    {
+                        _iconBitmap.Dispose();
+                        _iconBitmap = null;
+                    }
+                    if (_icon != null)
+                    {
+                        _icon.Dispose();
+                        _icon = null;
+                    }
+                    DestroyMenu();
+                    _window.Dispose();
+                    UpdateIcon(remove: true);
+                }
+
+                // TODO: 释放未托管的资源(未托管的对象)并重写终结器
+                // TODO: 将大型字段设置为 null
+                disposedValue = true;
+            }
+            base.Dispose(disposing);
         }
     }
 }

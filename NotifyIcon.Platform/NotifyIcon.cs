@@ -1,4 +1,4 @@
-﻿#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER
 using System.Runtime.Versioning;
 #endif
 using System.Collections.Specialized;
@@ -10,15 +10,13 @@ namespace System.Windows
     /// </summary>
     public abstract partial class NotifyIcon : IDisposable
     {
-        bool disposedValue;
-
         /// <summary>
         /// 
         /// </summary>
         public NotifyIcon()
         {
             ContextMenuStrip = new();
-            ContextMenuStrip.ItemsObservable.CollectionChanged += ItemsObservable_CollectionChanged;
+            ContextMenuStrip.Items.CollectionChanged += Items_CollectionChanged;
         }
 
         /// <summary>
@@ -26,7 +24,7 @@ namespace System.Windows
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void ItemsObservable_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        protected virtual void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
         }
 
@@ -110,6 +108,7 @@ namespace System.Windows
         public virtual void HideBalloonTip()
             => throw new PlatformNotSupportedException();
 
+        bool disposedValue;
         /// <summary>
         ///
         /// </summary>
@@ -120,9 +119,9 @@ namespace System.Windows
             {
                 if (disposing)
                 {
-                    ContextMenuStrip.ItemsObservable.CollectionChanged -= ItemsObservable_CollectionChanged;
-                    ContextMenuStrip.ItemsObservable.Clear();
                     // TODO: 释放托管状态(托管对象)
+                    ContextMenuStrip.Items.CollectionChanged -= Items_CollectionChanged;
+                    ContextMenuStrip.Items.Clear();
                 }
 
                 // TODO: 释放未托管的资源(未托管的对象)并重写终结器

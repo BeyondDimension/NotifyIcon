@@ -1,4 +1,4 @@
-﻿#if !NET5_0_WINDOWS && !NET6_0_WINDOWS
+#if !NET5_0_WINDOWS && !NET6_0_WINDOWS && !NETSTANDARD1_0 && !NET35 && !NET40 && !NET45 && !NETSTANDARD1_1
 #if MONO_MAC
 using MonoMac.AppKit;
 using MonoMac.Foundation;
@@ -23,7 +23,7 @@ namespace System.Windows
 #endif
     internal sealed class MacNotifyIcon : NotifyIcon
     {
-        readonly NSStatusItem statusItem;
+        NSStatusItem? statusItem;
 
         public MacNotifyIcon() : base()
         {
@@ -32,12 +32,15 @@ namespace System.Windows
 #else
             var length = NSStatusItemLength.Variable;
 #endif
-            statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(length);
-            statusItem.DoubleClick += StatusItem_DoubleClick;
+            NSRunLoop.Main.InvokeOnMainThread(() =>
+            {
+                statusItem = NSStatusBar.SystemStatusBar.CreateStatusItem(length);
+                statusItem.DoubleClick += StatusItem_DoubleClick;
+            });
         }
 
-        private void StatusItem_DoubleClick(object? sender, EventArgs e)
-            => DoubleClick?.Invoke(sender, e);
+        void StatusItem_DoubleClick(object? sender, EventArgs e)
+           => DoubleClick?.Invoke(sender, e);
 
         static NSImage Convert(object? value)
         {
@@ -107,7 +110,7 @@ namespace System.Windows
 #endif
         public override object? Icon
         {
-            set => statusItem.Image = Convert(value);
+            set => statusItem!.Image = Convert(value);
         }
 
 #if NET5_0_OR_GREATER || NET6_0_MACOS10_14
@@ -115,20 +118,20 @@ namespace System.Windows
 #endif
         public override string? Text
         {
-            get => statusItem.ToolTip;
-            set => statusItem.ToolTip = value;
+            get => statusItem!.ToolTip;
+            set => statusItem!.ToolTip = value;
         }
 
         public override bool Visible
 #if MONO_MAC
         {
-            get => statusItem.View.NeedsDisplay;
-            set => statusItem.View.NeedsDisplay = value;
+            get => statusItem!.View.NeedsDisplay;
+            set => statusItem!.View.NeedsDisplay = value;
         }
 #else
         {
-            get => statusItem.Visible;
-            set => statusItem.Visible = value;
+            get => statusItem!.Visible;
+            set => statusItem!.Visible = value;
         }
 #endif
 
@@ -138,12 +141,25 @@ namespace System.Windows
 
         public override event EventHandler<MouseEventArgs>? RightClick;
 
+        bool disposedValue;
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!disposedValue)
             {
-                statusItem.DoubleClick -= StatusItem_DoubleClick;
-                statusItem.Dispose();
+                if (disposing)
+                {
+                    // TODO: 释放托管状态(托管对象)
+                    if (statusItem != null)
+                    {
+                        statusItem.DoubleClick -= StatusItem_DoubleClick;
+                        statusItem.Dispose();
+                        statusItem = null;
+                    }
+                }
+
+                // TODO: 释放未托管的资源(未托管的对象)并重写终结器
+                // TODO: 将大型字段设置为 null
+                disposedValue = true;
             }
             base.Dispose(disposing);
         }
@@ -172,15 +188,18 @@ namespace System.Windows
                         menuItem1.Image = menuItem.Icon != null ? Convert(menuItem.Icon) : null;
                         break;
                     case nameof(ContextMenuStrip.MenuItem.Visible):
-                        menuItem1.View.NeedsDisplay = menuItem.Visible;
+                        if (menuItem1.View != null)
+                        {
+                            menuItem1.View.NeedsDisplay = menuItem.Visible;
+                        }
                         break;
                 }
             }
         }
 
-        protected override void ItemsObservable_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        protected override void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (statusItem.Menu == null)
+            if (statusItem!.Menu == null)
             {
                 statusItem.Menu = new();
             }
@@ -211,6 +230,7 @@ namespace System.Windows
             }
             void Add()
             {
+                if (e.NewItems == null) return;
                 foreach (var item in e.NewItems)
                 {
                     if (item is ContextMenuStrip.MenuItem menuItem)
@@ -222,6 +242,7 @@ namespace System.Windows
             }
             void Remove()
             {
+                if (e.OldItems == null) return;
                 foreach (var item in e.OldItems)
                 {
                     if (item is ContextMenuStrip.MenuItem menuItem)

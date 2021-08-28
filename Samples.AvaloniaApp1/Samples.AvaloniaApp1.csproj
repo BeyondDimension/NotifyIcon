@@ -1,17 +1,8 @@
-<Project Sdk="MSBuild.Sdk.Extras">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net6.0-macos10.14;Xamarin.Mac20</TargetFrameworks>
-    <AssemblyName>System.Windows.NotifyIcon.Mac</AssemblyName>
-    <RootNamespace>System.Windows</RootNamespace>
-    <Description>在通知区域创建图标的组件的 macOS 实现。</Description>
-    <PackageId>NotifyIcon.Mac</PackageId>
-    <DefineConstants>MAC;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <DefineConstants>MULTIPLE_PLATFORM;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) OR $(TargetFramework.Contains('-macos'))">
@@ -26,6 +17,10 @@
     <DefineConstants>DI;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) ">
+    <DefineConstants>DRAWING;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" ($(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'netstandard1.0') OR '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net46' ">
     <DefineConstants>DI;DI_1;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
@@ -34,8 +29,16 @@
     <PackageReference Include="MonoMac.NetStandard" />
   </ItemGroup>
 
+  <ItemGroup Condition=" $(DefineConstants.Contains('DRAWING')) ">
+    <PackageReference Include="System.Drawing.Common" />
+  </ItemGroup>
+
   <ItemGroup Condition=" $(DefineConstants.Contains('DI')) ">
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" !$(DefineConstants.Contains('XAMARIN_MAC')) AND !$(TargetFramework.Contains('windows')) AND !$(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'net35' AND '$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45' ">
+    <PackageReference Include="GtkSharp" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
@@ -47,11 +50,26 @@
     <Reference Include="PresentationCore" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <PackageReference Include="Microsoft.Win32.Primitives" />
+  </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\NotifyIcon\NotifyIconExtensions.cs" />
+    <Compile Include="..\NotifyIcon.Platform.Linux\LinuxNotifyIcon.cs" />
+    <Compile Include="..\NotifyIcon.Platform.Mac\MacNotifyIcon.cs" />
+    <Compile Include="..\NotifyIcon.Platform.Windows\WindowsNotifyIcon.cs" />
+    <Compile Include="..\NotifyIcon\*.cs" />
+    <Compile Include="..\Samples.ConsoleApp1\AppDelegate.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Diagnostics" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
+    <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
   </ItemGroup>
 </Project>

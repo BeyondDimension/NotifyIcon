@@ -4,15 +4,36 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>System.Windows.NotifyIcon.Linux</AssemblyName>
     <RootNamespace>System.Windows</RootNamespace>
-    <AssemblyOriginatorKeyFile>..\NotifyIcon.snk</AssemblyOriginatorKeyFile>
     <Description>在通知区域创建图标的组件的 Linux 实现。</Description>
     <PackageId>NotifyIcon.Linux</PackageId>
     <DefineConstants>LINUX;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) OR $(TargetFramework.StartsWith('Xamarin.Mac20')) OR '$(TargetFramework)' == 'net461' ">
     <DefineConstants>DI;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" ($(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'netstandard1.0') OR '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net46' ">
+    <DefineConstants>DI;DI_1;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" $(DefineConstants.Contains('DI')) ">
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+    <Reference Include="PresentationCore" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\NotifyIcon\NotifyIconExtensions.cs" />
@@ -24,9 +45,5 @@
 
   <ItemGroup>
     <PackageReference Include="GtkSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(DefineConstants.Contains('DI')) ">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 </Project>

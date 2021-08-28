@@ -1,4 +1,4 @@
-﻿#if !XAMARIN_MAC && !__MACOS__ && !NET6_0_MACOS10_14 && !NET5_0_WINDOWS && !NET6_0_WINDOWS
+#if !XAMARIN_MAC && !__MACOS__ && !NET6_0_MACOS10_14 && !NET5_0_WINDOWS && !NET6_0_WINDOWS && !NETSTANDARD1_0 && !NET35 && !NET40 && !NET45 && !NETSTANDARD1_1
 #if NET5_0_OR_GREATER
 using System.Runtime.Versioning;
 #endif
@@ -144,14 +144,23 @@ namespace System.Windows
 
         public override event EventHandler<MouseEventArgs>? RightClick;
 
+        bool disposedValue;
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (!disposedValue)
             {
-                popupMenu?.Dispose();
-                statusIcon.Activate -= StatusIcon_Activate;
-                statusIcon.PopupMenu -= StatusIcon_PopupMenu;
-                statusIcon.Dispose();
+                if (disposing)
+                {
+                    // TODO: 释放托管状态(托管对象)
+                    popupMenu?.Dispose();
+                    statusIcon.Activate -= StatusIcon_Activate;
+                    statusIcon.PopupMenu -= StatusIcon_PopupMenu;
+                    statusIcon.Dispose();
+                }
+
+                // TODO: 释放未托管的资源(未托管的对象)并重写终结器
+                // TODO: 将大型字段设置为 null
+                disposedValue = true;
             }
             base.Dispose(disposing);
         }

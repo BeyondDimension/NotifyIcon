@@ -1,29 +1,33 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;net461;net40;net35;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net5.0;net461;net45;net40;net35;netstandard2.0</TargetFrameworks>
     <AssemblyName>System.Windows.NotifyIcon.Windows</AssemblyName>
     <RootNamespace>System.Windows</RootNamespace>
-    <AssemblyOriginatorKeyFile>..\NotifyIcon.snk</AssemblyOriginatorKeyFile>
     <Description>在通知区域创建图标的组件的 Win32 API 实现。</Description>
     <PackageId>NotifyIcon.Windows</PackageId>
     <DefineConstants>WINDOWS;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) OR $(TargetFramework.StartsWith('Xamarin.Mac20')) OR '$(TargetFramework)' == 'net461' ">
     <DefineConstants>DI;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) ">
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) ">
     <DefineConstants>DRAWING;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\NotifyIcon\NotifyIconExtensions.cs" />
-  </ItemGroup>
+  <PropertyGroup Condition=" ($(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'netstandard1.0') OR '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net46' ">
+    <DefineConstants>DI;DI_1;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
+  <ItemGroup Condition=" $(DefineConstants.Contains('MONO_MAC')) ">
+    <PackageReference Include="MonoMac.NetStandard" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(DefineConstants.Contains('DRAWING')) ">
@@ -34,7 +38,24 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+    <Reference Include="PresentationCore" />
+  </ItemGroup>
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Include="Microsoft.Win32.Primitives" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\NotifyIcon\NotifyIconExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
   </ItemGroup>
 </Project>

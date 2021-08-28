@@ -12,15 +12,13 @@ namespace System.Windows
     {
         internal ContextMenuStrip()
         {
-            ItemsObservable = new();
+            Items = new();
         }
-
-        internal ObservableCollection<MenuItem> ItemsObservable { get; }
 
         /// <summary>
         /// 获取或设置菜单项。
         /// </summary>
-        public IList<MenuItem> Items => ItemsObservable;
+        public ObservableCollection<MenuItem> Items { get; }
 
         /// <summary>
         /// 表示 Menu 内某个可选择的项。

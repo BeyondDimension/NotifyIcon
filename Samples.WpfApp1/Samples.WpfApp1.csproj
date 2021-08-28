@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon.Platform.Windows\NotifyIcon.Platform.Windows.csproj" />
+    <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
+  </ItemGroup>
+
+</Project>
