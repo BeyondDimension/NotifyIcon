@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="NotifyIcon" />
+    <PackageReference Include="OperatingSystem2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 
 </Project>
