@@ -286,8 +286,8 @@ namespace System.Windows
         {
             if (iconData != null)
             {
-                iconData.szInfo = tipTitle ?? string.Empty;
-                iconData.szInfoTitle = tipText ?? string.Empty;
+                iconData.szInfoTitle = tipTitle ?? string.Empty;
+                iconData.szInfo = tipText ?? string.Empty;
                 iconData.uFlags |= NIF.INFO;
                 //iconData.CustomBalloonIconHandle = balloonIconHandle;
                 iconData.dwInfoFlags = flags;
