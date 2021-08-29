@@ -9,11 +9,15 @@
     <PackageVersion Include="Avalonia" Version="0.10.7" />
     <PackageVersion Include="Avalonia.Desktop" Version="0.10.7" />
     <PackageVersion Include="Avalonia.Diagnostics" Version="0.10.7" />
+    <PackageVersion Include="NotifyIcon" Version="1.0.2" />
+    <PackageVersion Include="NotifyIcon.Windows" Version="1.0.2" />
   </ItemGroup>
   <ItemGroup Condition=" $(DefineConstants.Contains('DI_1')) ">
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
   </ItemGroup>
-  <ItemGroup Condition=" !$(DefineConstants.Contains('DI_1')) ">
+  <ItemGroup Condition=" $(DefineConstants.Contains('DI_5')) ">
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
   </ItemGroup>
 </Project>

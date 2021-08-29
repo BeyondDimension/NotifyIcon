@@ -1,7 +1,7 @@
 <Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.1;net5.0;net461;net5.0-windows;net6.0-macos10.14;Xamarin.Mac20;netstandard1.0;net35;net40;net45</TargetFrameworks>
+    <TargetFrameworks>net5.0;net461;net5.0-windows;net6.0-macos10.14;Xamarin.Mac20;netstandard2.0;net35;net40;net45;net461</TargetFrameworks>
     <AssemblyName>System.Windows.NotifyIcon.Platform</AssemblyName>
     <RootNamespace>System.Windows</RootNamespace>
     <Description>在通知区域创建图标的组件（运行时自动匹配平台实现）。</Description>
@@ -22,16 +22,20 @@
     <DefineConstants>MONO_MAC;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) OR $(TargetFramework.StartsWith('Xamarin.Mac20')) OR '$(TargetFramework)' == 'net461' ">
-    <DefineConstants>DI;$(DefineConstants)</DefineConstants>
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) OR '$(TargetFramework)' == 'net461' ">
+    <DefineConstants>DI;DI_5;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) ">
+  <PropertyGroup Condition=" ($(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'netstandard1.0') OR '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net46' OR $(TargetFramework.StartsWith('Xamarin.Mac20')) ">
+    <DefineConstants>DI;DI_1;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" ($(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.Contains('windows')) OR $(TargetFramework.EndsWith('net5.0')) OR $(TargetFramework.EndsWith('net6.0'))) AND !$(TargetFramework.StartsWith('Xamarin.Mac20')) AND !$(TargetFramework.Contains('macos')) ">
     <DefineConstants>DRAWING;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" ($(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'netstandard1.0') OR '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net46' ">
-    <DefineConstants>DI;DI_1;$(DefineConstants)</DefineConstants>
+  <PropertyGroup Condition=" !$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('net6')) AND !$(TargetFramework.StartsWith('Xamarin.Mac20')) ">
+    <DefineConstants>__LIB_SYS_OS2__;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition=" $(DefineConstants.Contains('MONO_MAC')) ">
@@ -43,10 +47,10 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(DefineConstants.Contains('DI')) ">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
 
-  <ItemGroup Condition=" !$(DefineConstants.Contains('XAMARIN_MAC')) AND !$(TargetFramework.Contains('windows')) AND !$(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'net35' AND '$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45' ">
+  <ItemGroup Condition=" !$(DefineConstants.Contains('XAMARIN_MAC')) AND !$(TargetFramework.Contains('windows')) AND !$(TargetFramework.Contains('macos')) AND !$(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'net35' AND '$(TargetFramework)' != 'net40' AND '$(TargetFramework)' != 'net45' ">
     <PackageReference Include="GtkSharp" />
   </ItemGroup>
 
@@ -69,7 +73,7 @@
     <Compile Include="..\NotifyIcon.Platform.Windows\WindowsNotifyIcon.cs" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" $(DefineConstants.Contains('__LIB_SYS_OS2__')) ">
     <PackageReference Include="OperatingSystem2" />
   </ItemGroup>
 

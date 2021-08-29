@@ -2,6 +2,9 @@
 using System.Runtime.Versioning;
 #endif
 using System.Collections.Specialized;
+using System.Linq;
+using System.IO;
+using System.Reflection;
 
 namespace System.Windows
 {
@@ -11,7 +14,7 @@ namespace System.Windows
     public abstract partial class NotifyIcon : IDisposable
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public NotifyIcon()
         {
@@ -20,7 +23,7 @@ namespace System.Windows
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -34,7 +37,7 @@ namespace System.Windows
         public ContextMenuStrip ContextMenuStrip { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -42,7 +45,7 @@ namespace System.Windows
             => ContextMenuStrip.OnCollapse(sender, e);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -50,7 +53,7 @@ namespace System.Windows
             => ContextMenuStrip.OnPopup(sender, e);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="menuItem"></param>
         /// <param name="sender"></param>
@@ -148,7 +151,7 @@ namespace System.Windows
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public class MouseEventArgs : EventArgs
         {
@@ -172,7 +175,6 @@ namespace System.Windows
             /// </summary>
             public MouseEventArgs()
             {
-
             }
 
             /// <summary>
@@ -185,6 +187,89 @@ namespace System.Windows
                 X = x;
                 Y = y;
             }
+        }
+
+#if !NETSTANDARD1_0
+        static object[]? GetCustomAttributesSafe(Assembly assembly, Type attrType)
+        {
+            try
+            {
+                return assembly.GetCustomAttributes(attrType, true);
+            }
+            catch (FileNotFoundException)
+            {
+            }
+
+            return null;
+        }
+
+        static Type GetImplType()
+        {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var query = from assembly in assemblies
+                        let attribute = GetCustomAttributesSafe(assembly, typeof(DependencyAttribute))
+                        where attribute != null && attribute.Length == 1
+                        select (DependencyAttribute)attribute.Single();
+            var type = query.FirstOrDefault()?.Implementor;
+            if (type != null)
+            {
+                if (typeof(NotifyIcon).IsAssignableFrom(type))
+                {
+                    return type;
+                }
+                else if (typeof(IRuntimeImplType).IsAssignableFrom(type))
+                {
+                    type = ((IRuntimeImplType)Activator.CreateInstance(type)!).Type;
+                    if (typeof(NotifyIcon).IsAssignableFrom(type))
+                    {
+                        return type;
+                    }
+                }
+            }
+            throw new NotImplementedException();
+        }
+
+        [AttributeUsage(AttributeTargets.Assembly)]
+        internal sealed class DependencyAttribute : Attribute
+        {
+            public DependencyAttribute(Type implementorType)
+            {
+                Implementor = implementorType;
+            }
+
+            internal Type Implementor { get; private set; }
+        }
+
+        internal interface IRuntimeImplType
+        {
+            Type Type { get; }
+        }
+#endif
+
+        /// <summary>
+        /// 获取 <see cref="NotifyIcon"/> 的实现类型。
+        /// </summary>
+        public static Type Type =>
+#if NETSTANDARD1_0
+            throw new NotImplementedException();
+#elif NET35
+            GetImplType();
+#else
+            _ImplType.Value;
+#endif
+
+#if !NETSTANDARD1_0 && !NET35
+        static readonly Lazy<Type> _ImplType = new(GetImplType);
+#endif
+
+        /// <summary>
+        /// 创建 <see cref="NotifyIcon"/> 实例。
+        /// </summary>
+        /// <returns></returns>
+        public static NotifyIcon Create()
+        {
+            var implType = Type;
+            return (NotifyIcon)Activator.CreateInstance(implType)!;
         }
     }
 }

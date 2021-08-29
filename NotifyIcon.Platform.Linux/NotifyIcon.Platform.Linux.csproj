@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
     <AssemblyName>System.Windows.NotifyIcon.Linux</AssemblyName>
     <RootNamespace>System.Windows</RootNamespace>
     <Description>在通知区域创建图标的组件的 Linux 实现。</Description>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) OR $(TargetFramework.StartsWith('Xamarin.Mac20')) OR '$(TargetFramework)' == 'net461' ">
-    <DefineConstants>DI;$(DefineConstants)</DefineConstants>
+    <DefineConstants>DI;DI_5;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" ($(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'netstandard1.0') OR '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net46' ">
@@ -23,7 +23,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" $(DefineConstants.Contains('DI')) ">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">

@@ -1,3 +1,6 @@
+#if !__LIB_SYS_OS2__ && !XAMARIN_MAC
+using OperatingSystem2 = System.OperatingSystem;
+#endif
 #if NET5_0_OR_GREATER
 using System.Runtime.Versioning;
 #endif
@@ -15,6 +18,13 @@ using NotifyIconImpl = System.Windows.WindowsNotifyIcon;
 #endif
 #if DRAWING || NETFRAMEWORK
 using System.Drawing;
+#endif
+using System.Windows;
+
+#if LINUX || MAC || XAMARIN_MAC || NET6_0_MACOS10_14 || WINDOWS || NET5_0_WINDOWS || NET6_0_WINDOWS
+[assembly: NotifyIcon.Dependency(typeof(NotifyIconImpl))]
+#else
+[assembly: NotifyIcon.Dependency(typeof(NotifyIconExtensions.RuntimeImplType))]
 #endif
 
 namespace System.Windows
@@ -37,6 +47,51 @@ namespace System.Windows
 #endif
 #endif
 
+#if LINUX || MAC || XAMARIN_MAC || NET6_0_MACOS10_14 || WINDOWS || NET5_0_WINDOWS || NET6_0_WINDOWS
+#else
+        internal sealed class RuntimeImplType : NotifyIcon.IRuntimeImplType
+        {
+            Type NotifyIcon.IRuntimeImplType.Type => GetNotifyIconImpl();
+        }
+#endif
+
+        static Type GetNotifyIconImpl()
+        {
+#if LINUX || MAC || XAMARIN_MAC || NET6_0_MACOS10_14 || WINDOWS || NET5_0_WINDOWS || NET6_0_WINDOWS
+            return typeof(NotifyIconImpl);
+#else
+#if !NETSTANDARD1_1
+            if (OperatingSystem2.IsWindows
+#if !__LIB_SYS_OS2__
+            ()
+#endif
+            )
+            {
+                return typeof(WindowsNotifyIcon);
+            }
+#if !NET45 && !NET40 && !NET35
+            if (OperatingSystem2.IsLinux
+#if !__LIB_SYS_OS2__
+            ()
+#endif
+)
+            {
+                return typeof(LinuxNotifyIcon);
+            }
+            if (OperatingSystem2.IsMacOS
+#if !__LIB_SYS_OS2__
+            ()
+#endif
+)
+            {
+                return typeof(MacNotifyIcon);
+            }
+#endif
+#endif
+            throw new PlatformNotSupportedException();
+#endif
+        }
+
 #if DI
         /// <summary>
         /// 添加 <see cref="NotifyIcon"/> 到 <see cref="IServiceCollection"/> 中。
@@ -48,31 +103,8 @@ namespace System.Windows
 #endif
         public static IServiceCollection AddNotifyIcon(this IServiceCollection services)
         {
-#if LINUX || MAC || XAMARIN_MAC || NET6_0_MACOS10_14 || WINDOWS || NET5_0_WINDOWS || NET6_0_WINDOWS
-            services.AddSingleton<NotifyIcon, NotifyIconImpl>();
+            services.AddSingleton(typeof(NotifyIcon), GetNotifyIconImpl());
             return services;
-#else
-#if !NETSTANDARD1_1
-            if (OperatingSystem2.IsWindows)
-            {
-                services.AddSingleton<NotifyIcon, WindowsNotifyIcon>();
-                return services;
-            }
-#if !NET45
-            if (OperatingSystem2.IsLinux)
-            {
-                services.AddSingleton<NotifyIcon, LinuxNotifyIcon>();
-                return services;
-            }
-            if (OperatingSystem2.IsMacOS)
-            {
-                services.AddSingleton<NotifyIcon, MacNotifyIcon>();
-                return services;
-            }
-#endif
-#endif
-            throw new PlatformNotSupportedException();
-#endif
         }
 #endif
 
@@ -126,36 +158,4 @@ namespace System.Windows
         //        }
         //#endif
     }
-
-#if !DI
-    /// <summary>
-    ///
-    /// </summary>
-#if NET5_0_OR_GREATER && (LINUX || MAC || WINDOWS)
-    [SupportedOSPlatform(SupportedOSPlatformName)]
-#endif
-    public static class NotifyIconFactory
-    {
-        /// <summary>
-        /// <see cref="NotifyIcon"/> 的实现类型。
-        /// </summary>
-        public static Type ImplType =>
-#if NETSTANDARD1_0
-            throw new NotSupportedException();
-#else
-            typeof(NotifyIconImpl);
-#endif
-
-        /// <summary>
-        /// 创建 <see cref="NotifyIcon"/> 实例。
-        /// </summary>
-        /// <returns></returns>
-        public static NotifyIcon Create() =>
-#if NETSTANDARD1_0
-            throw new NotSupportedException();
-#else
-            new NotifyIconImpl();
-#endif
-    }
-#endif
 }

@@ -39,7 +39,7 @@
     - 添加到依赖注入服务中
         - ```services.AddNotifyIcon();```
 2. 在不支持 **Microsoft.Extensions.DependencyInjection** 的目标框架上使用
-    - ```NotifyIcon notifyIcon = NotifyIconFactory.Create();```
+    - ```NotifyIcon notifyIcon = NotifyIcon.Create();```
 
 ## 添加右键菜单项
 ```
