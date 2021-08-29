@@ -13,7 +13,7 @@ namespace Samples.AvaloniaApp1
         /// <param name="handle"></param>
         /// <returns></returns>
         static string GetArguments(string handle)
-            => $"{Program.ArgsNotifyIcon} {handle} {Process.GetCurrentProcess().Id}";
+            => $"{Program.ArgsNotifyIcon} {handle} {Environment.ProcessId}";
 
         bool HandlerCommand(string command)
         {
