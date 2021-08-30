@@ -8,6 +8,7 @@
     <PackageId>NotifyIcon.Windows</PackageId>
     <DefineConstants>WINDOWS;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

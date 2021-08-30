@@ -7,6 +7,7 @@
     <Description>在通知区域创建图标的组件。</Description>
     <PackageId>NotifyIcon.Base</PackageId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
