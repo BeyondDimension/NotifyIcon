@@ -6,6 +6,15 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <AllowedReferenceRelatedFileExtensions>
+      <!-- Prevent default XML and PDB files copied to output in RELEASE. 
+           Only *.allowedextension files will be included, which doesn't exist in my case.
+       -->
+      .allowedextension
+    </AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\NotifyIcon.Platform.Windows\NotifyIcon.Platform.Windows.csproj" />
     <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
