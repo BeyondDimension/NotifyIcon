@@ -23,6 +23,7 @@ namespace System.Windows
         static int _nextUID;
         bool _iconAdded;
         IntPtr popupMenu;
+        static readonly uint WM_TASKBARCREATED = RegisterWindowMessage("TaskbarCreated");
 
         /// <summary>
         /// Represents the current icon data.
@@ -520,40 +521,36 @@ namespace System.Windows
         /// <returns></returns>
         IntPtr HandleWndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
         {
-            switch (msg)
+            if (msg == (uint)CustomWindowsMessage.WM_TRAYMOUSE)
             {
-                case (uint)CustomWindowsMessage.WM_TRAYMOUSE:
-                    // Forward WM_TRAYMOUSE messages to the tray icon's window procedure
-
-                    // We only care about tray icon messages
-                    if (msg == (uint)CustomWindowsMessage.WM_TRAYMOUSE)
-                    {
-                        // Determine the type of message and call the matching event handlers
-                        switch (lParam.ToInt32())
+                // Determine the type of message and call the matching event handlers
+                switch (lParam.ToInt32())
+                {
+                    case (int)WindowsMessage.WM_LBUTTONUP:
+                        if (!_doubleClick)
                         {
-                            case (int)WindowsMessage.WM_LBUTTONUP:
-                                if (!_doubleClick)
-                                {
-                                    Click?.Invoke(this, EventArgs.Empty);
-                                }
-                                _doubleClick = false;
-                                break;
-
-                            case (int)WindowsMessage.WM_LBUTTONDBLCLK:
-                                DoubleClick?.Invoke(this, EventArgs.Empty);
-                                _doubleClick = true;
-                                break;
-
-                            case (int)WindowsMessage.WM_RBUTTONUP:
-                                GetCursorPos(out var point);
-                                RightClick?.Invoke(this, new(point.X, point.Y));
-                                ShowContextMenu();
-                                break;
+                            Click?.Invoke(this, EventArgs.Empty);
                         }
-                    }
-                    break;
-            }
+                        _doubleClick = false;
+                        break;
 
+                    case (int)WindowsMessage.WM_LBUTTONDBLCLK:
+                        DoubleClick?.Invoke(this, EventArgs.Empty);
+                        _doubleClick = true;
+                        break;
+
+                    case (int)WindowsMessage.WM_RBUTTONUP:
+                        GetCursorPos(out var point);
+                        RightClick?.Invoke(this, new(point.X, point.Y));
+                        ShowContextMenu();
+                        break;
+                }
+            }
+            if (msg == WM_TASKBARCREATED)
+            {
+                UpdateIcon(true);
+                UpdateIcon();
+            }
             return default;
         }
 
@@ -674,6 +671,9 @@ namespace System.Windows
 
         [DllImport("user32.dll")]
         static extern bool DestroyMenu(IntPtr hmenu);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint RegisterWindowMessage(string lpString);
 
         [Flags]
         enum UFLAGS : uint
