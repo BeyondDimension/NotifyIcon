@@ -42,7 +42,15 @@ namespace Samples.AvaloniaApp1
             {
                 desktop.Exit += (_, _) =>
                 {
-                    notifyIconPipeServer?.Dispose();
+                    if (Program.IsLinux && !Program.IsNotifyIconProcess)
+                    {
+                        notifyIconPipeServer?.Dispose();
+                    }
+                    else
+                    {
+                        var notifyIcon = Program.Services.GetRequiredService<NotifyIcon>();
+                        notifyIcon?.Dispose();
+                    }
                 };
 
                 desktop.MainWindow = new MainWindow();
@@ -52,8 +60,7 @@ namespace Samples.AvaloniaApp1
                     var notifyIcon = Program.Services.GetRequiredService<NotifyIcon>();
                     notifyIcon.Click += OnNotifyIconClick;
                 }
-
-                if (Program.IsLinux && !Program.IsNotifyIconProcess)
+                else if (!Program.IsNotifyIconProcess)
                 {
                     notifyIconPipeServer = new();
                     notifyIconPipeServer.OnStart();
