@@ -276,6 +276,8 @@ namespace System.Windows
             }
             else
             {
+                iconData.szInfoTitle = string.Empty;
+                iconData.szInfo = string.Empty;
                 Shell_NotifyIcon(NIM.DELETE, iconData);
                 _iconAdded = false;
             }
@@ -544,7 +546,7 @@ namespace System.Windows
                         break;
                 }
             }
-            if (msg == WM_TASKBARCREATED)
+            if (msg == WM_TASKBARCREATED && Visible)
             {
                 UpdateIcon(true);
                 UpdateIcon();
