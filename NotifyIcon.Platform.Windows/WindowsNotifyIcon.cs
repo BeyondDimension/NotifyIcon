@@ -276,8 +276,12 @@ namespace System.Windows
             }
             else
             {
-                iconData.szInfoTitle = string.Empty;
-                iconData.szInfo = string.Empty;
+                if (!string.IsNullOrEmpty(iconData.szInfo))
+                {
+                    iconData.szInfoTitle = string.Empty;
+                    iconData.szInfo = string.Empty;
+                    Shell_NotifyIcon(NIM.MODIFY, iconData);
+                }
                 Shell_NotifyIcon(NIM.DELETE, iconData);
                 _iconAdded = false;
             }
