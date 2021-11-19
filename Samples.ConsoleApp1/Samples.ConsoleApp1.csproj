@@ -23,7 +23,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NotifyIcon\NotifyIcon.csproj" />
     <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
   </ItemGroup>
 
@@ -31,6 +30,7 @@
     <PackageReference Include="OperatingSystem2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="MonoMac.NetStandard" />
+    <PackageReference Include="NotifyIcon" />
   </ItemGroup>
 
 </Project>

@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -27,6 +23,7 @@
   <ItemGroup>
     <PackageReference Include="ReactiveUI" />
     <PackageReference Include="OperatingSystem2" />
+    <PackageReference Include="NotifyIcon.Base" />
   </ItemGroup>
 
 </Project>

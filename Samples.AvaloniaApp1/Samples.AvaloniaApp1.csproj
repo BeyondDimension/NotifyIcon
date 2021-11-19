@@ -32,10 +32,14 @@
     <PackageReference Include="OperatingSystem2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="MonoMac.NetStandard" />
+    <PackageReference Include="SkiaSharp" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" />
+    <PackageReference Include="HarfBuzzSharp" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" />
+    <PackageReference Include="NotifyIcon" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NotifyIcon\NotifyIcon.csproj" />
     <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
   </ItemGroup>
 </Project>
