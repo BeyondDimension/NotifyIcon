@@ -1,18 +1,27 @@
 <Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net6.0-macos10.14;Xamarin.Mac20</TargetFrameworks>
+    <!--<TargetFrameworks>netstandard2.0;net461;net6.0-macos;Xamarin.Mac20</TargetFrameworks>-->
+    <TargetFrameworks>netstandard2.0;net461;net6.0-macos</TargetFrameworks>
     <AssemblyName>System.Windows.NotifyIcon.Mac</AssemblyName>
     <RootNamespace>System.Windows</RootNamespace>
     <Description>在通知区域创建图标的组件的 macOS 实现。</Description>
     <PackageId>NotifyIcon.Mac</PackageId>
     <DefineConstants>MAC;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.0.2</Version>
+    <Version>1.0.4</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.Contains('-macos')) ">
+    <SupportedOSPlatformVersion>10.14</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) ">
+    <DefineConstants>NET5_0_OR_GREATER2;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) OR $(TargetFramework.Contains('-macos'))">
@@ -23,20 +32,8 @@
     <DefineConstants>MONO_MAC;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.StartsWith('net5')) OR $(TargetFramework.StartsWith('net6')) OR '$(TargetFramework)' == 'net461' ">
-    <DefineConstants>DI;DI_5;$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" ($(TargetFramework.StartsWith('netstandard1')) AND '$(TargetFramework)' != 'netstandard1.0') OR '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452' OR '$(TargetFramework)' == 'net46' OR $(TargetFramework.StartsWith('Xamarin.Mac20')) ">
-    <DefineConstants>DI;DI_1;$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup Condition=" $(DefineConstants.Contains('MONO_MAC')) ">
     <PackageReference Include="MonoMac.NetStandard" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(DefineConstants.Contains('DI')) ">
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
@@ -46,10 +43,6 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
     <Reference Include="PresentationCore" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\NotifyIcon\NotifyIconExtensions.cs" />
   </ItemGroup>
 
   <ItemGroup>

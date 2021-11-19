@@ -3,16 +3,15 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <DefineConstants>DI_5;$(DefineConstants)</DefineConstants>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon.Platform.Windows\NotifyIcon.Platform.Windows.csproj" />
     <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NotifyIcon.Windows" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 

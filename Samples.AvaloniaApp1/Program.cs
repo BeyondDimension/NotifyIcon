@@ -3,8 +3,13 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Runtime.Versioning;
 using System.Windows;
 using GtkApplication = Gtk.Application;
+
+[assembly: SupportedOSPlatform("windows")]
+[assembly: SupportedOSPlatform("macos")]
+[assembly: SupportedOSPlatform("linux")]
 
 namespace Samples.AvaloniaApp1
 {
@@ -98,7 +103,7 @@ namespace Samples.AvaloniaApp1
         /// <param name="services"></param>
         static void ConfigureServices(IServiceCollection services)
         {
-            services.AddNotifyIcon();
+            services.AddSingleton(typeof(NotifyIcon), NotifyIcon.ImplType);
         }
 
         internal static void Shutdown()

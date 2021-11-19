@@ -3,17 +3,25 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net6.0</TargetFrameworks>
-    <DefineConstants>DI_5;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) OR $(TargetFramework.Contains('-macos'))">
+    <DefineConstants>XAMARIN_MAC;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.EndsWith('net5.0')) OR $(TargetFramework.EndsWith('net6.0')) OR '$(TargetFramework)' == 'net461' ">
+    <DefineConstants>MONO_MAC;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon\NotifyIcon.csproj" />
     <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NotifyIcon" />
     <PackageReference Include="OperatingSystem2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="MonoMac.NetStandard" />
   </ItemGroup>
 
 </Project>

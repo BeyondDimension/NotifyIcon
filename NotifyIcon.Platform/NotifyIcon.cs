@@ -1,16 +1,19 @@
-#if NET5_0_OR_GREATER
 using System.Runtime.Versioning;
-#endif
 using System.Collections.Specialized;
-using System.Linq;
-using System.IO;
-using System.Reflection;
+#if !__LIB_SYS_OS2__ && !XAMARIN_MAC
+using OperatingSystem2 = System.OperatingSystem;
+#endif
 
 namespace System.Windows
 {
     /// <summary>
     /// 指定可在通知区域创建图标的组件。
     /// </summary>
+#if NET5_0_OR_GREATER2
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("macos")]
+    [SupportedOSPlatform("linux")]
+#endif
     public abstract partial class NotifyIcon : IDisposable
     {
         /// <summary>
@@ -96,7 +99,7 @@ namespace System.Windows
         /// <param name="tipTitle">提示标题。</param>
         /// <param name="tipText">提示文本。</param>
         /// <param name="tipIcon">提示图标。</param>
-#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER2
         [SupportedOSPlatform("windows")]
 #endif
         public virtual void ShowBalloonTip(string tipTitle, string tipText, ToolTipIcon tipIcon)
@@ -105,7 +108,7 @@ namespace System.Windows
         /// <summary>
         /// 隐藏在任务栏中的气球提示（仅支持 Windows）。
         /// </summary>
-#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER2
         [SupportedOSPlatform("windows")]
 #endif
         public virtual void HideBalloonTip()
@@ -189,76 +192,59 @@ namespace System.Windows
             }
         }
 
-#if !NETSTANDARD1_0
-        static object[]? GetCustomAttributesSafe(Assembly assembly, Type attrType)
-        {
-            try
-            {
-                return assembly.GetCustomAttributes(attrType, true);
-            }
-            catch (FileNotFoundException)
-            {
-            }
+        static Type GetImplType() => GetImplTypeCore() ?? throw new NotSupportedException("You will need to install one of the following packages, Install-Package NotifyIcon or Install-Package NotifyIcon.Windows or Install-Package NotifyIcon.Linux or Install-Package NotifyIcon.Mac");
 
+        static Type? GetImplTypeCore()
+        {
+            if (OperatingSystem2.IsWindows
+#if !__LIB_SYS_OS2__
+            ()
+#endif
+                )
+            {
+                return Type.GetType("System.Windows.WindowsNotifyIcon, System.Windows.NotifyIcon.Windows") ??
+                    Type.GetType("System.Windows.WindowsNotifyIcon, System.Windows.NotifyIcon.Platform");
+            }
+            else if (OperatingSystem2.IsMacOS
+#if !__LIB_SYS_OS2__
+            ()
+#endif
+                )
+            {
+                return Type.GetType("System.Windows.MacNotifyIcon, System.Windows.NotifyIcon.Mac") ??
+                    Type.GetType("System.Windows.MacNotifyIcon, System.Windows.NotifyIcon.Platform");
+            }
+            else if (OperatingSystem2.IsAndroid
+#if !__LIB_SYS_OS2__
+            ()
+#endif
+                )
+            {
+                return null;
+            }
+            else if (OperatingSystem2.IsLinux
+#if !__LIB_SYS_OS2__
+            ()
+#endif
+                )
+            {
+                return Type.GetType("System.Windows.LinuxNotifyIcon, System.Windows.NotifyIcon.Linux") ??
+                    Type.GetType("System.Windows.LinuxNotifyIcon, System.Windows.NotifyIcon.Platform");
+            }
             return null;
         }
-
-        static Type GetImplType()
-        {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var query = from assembly in assemblies
-                        let attribute = GetCustomAttributesSafe(assembly, typeof(DependencyAttribute))
-                        where attribute != null && attribute.Length == 1
-                        select (DependencyAttribute)attribute.Single();
-            var type = query.FirstOrDefault()?.Implementor;
-            if (type != null)
-            {
-                if (typeof(NotifyIcon).IsAssignableFrom(type))
-                {
-                    return type;
-                }
-                else if (typeof(IRuntimeImplType).IsAssignableFrom(type))
-                {
-                    type = ((IRuntimeImplType)Activator.CreateInstance(type)!).Type;
-                    if (typeof(NotifyIcon).IsAssignableFrom(type))
-                    {
-                        return type;
-                    }
-                }
-            }
-            throw new NotImplementedException();
-        }
-
-        [AttributeUsage(AttributeTargets.Assembly)]
-        internal sealed class DependencyAttribute : Attribute
-        {
-            public DependencyAttribute(Type implementorType)
-            {
-                Implementor = implementorType;
-            }
-
-            internal Type Implementor { get; private set; }
-        }
-
-        internal interface IRuntimeImplType
-        {
-            Type Type { get; }
-        }
-#endif
 
         /// <summary>
         /// 获取 <see cref="NotifyIcon"/> 的实现类型。
         /// </summary>
-        public static Type Type =>
-#if NETSTANDARD1_0
-            throw new NotImplementedException();
-#elif NET35
+        public static Type ImplType =>
+#if NET35
             GetImplType();
 #else
             _ImplType.Value;
 #endif
 
-#if !NETSTANDARD1_0 && !NET35
+#if !NET35
         static readonly Lazy<Type> _ImplType = new(GetImplType);
 #endif
 
@@ -268,7 +254,7 @@ namespace System.Windows
         /// <returns></returns>
         public static NotifyIcon Create()
         {
-            var implType = Type;
+            var implType = ImplType;
             return (NotifyIcon)Activator.CreateInstance(implType)!;
         }
     }

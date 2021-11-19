@@ -2,7 +2,14 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-    <DefineConstants>DI_5;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) OR $(TargetFramework.Contains('-macos'))">
+    <DefineConstants>XAMARIN_MAC;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) OR $(TargetFramework.EndsWith('net5.0')) OR $(TargetFramework.EndsWith('net6.0')) OR '$(TargetFramework)' == 'net461' ">
+    <DefineConstants>MONO_MAC;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,12 +20,13 @@
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Diagnostics" />
-    <PackageReference Include="NotifyIcon" />
     <PackageReference Include="OperatingSystem2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="MonoMac.NetStandard" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon\NotifyIcon.csproj" />
     <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
   </ItemGroup>
 </Project>

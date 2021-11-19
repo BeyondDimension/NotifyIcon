@@ -1,6 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Runtime.Versioning;
 using System.Windows;
+
+[assembly: SupportedOSPlatform("windows")]
 
 namespace Samples.WpfApp1
 {
@@ -37,7 +40,7 @@ namespace Samples.WpfApp1
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddNotifyIcon();
+            services.AddSingleton(typeof(NotifyIcon), NotifyIcon.ImplType);
         }
     }
 }

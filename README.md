@@ -30,16 +30,11 @@
     - .NET Standard 2.0+
 
 ## 使用方式
-1. 在以下目标框架仅支持通过 **Microsoft.Extensions.DependencyInjection** 使用
-    - 目标框架支持
-        - .NET Framework 4.5+ / Mono 4.6+
-        - .NET Core 1.0+
-        - .NET 5+
-        - .NET Standard 1.1+
-    - 添加到依赖注入服务中
-        - ```services.AddNotifyIcon();```
-2. 在不支持 **Microsoft.Extensions.DependencyInjection** 的目标框架上使用
+1. 直接使用
     - ```NotifyIcon notifyIcon = NotifyIcon.Create();```
+2. 通过 **Microsoft.Extensions.DependencyInjection** 使用
+    - 添加到依赖注入服务中
+        - ```services.AddSingleton(typeof(NotifyIcon), NotifyIcon.ImplType);```
 
 ## 添加右键菜单项
 ```

@@ -1,16 +1,14 @@
 #if !XAMARIN_MAC && !__MACOS__ && !NET6_0_MACOS10_14 && !NET5_0_WINDOWS && !NET6_0_WINDOWS && !NETSTANDARD1_0 && !NET35 && !NET40 && !NET45 && !NETSTANDARD1_1
-#if NET5_0_OR_GREATER
-using System.Runtime.Versioning;
-#endif
 using Gdk;
 using Gtk;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 
 namespace System.Windows
 {
 #pragma warning disable CS0612 // 类型或成员已过时
-#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER2
     [SupportedOSPlatform("linux")]
 #endif
     internal sealed class LinuxNotifyIcon : NotifyIcon

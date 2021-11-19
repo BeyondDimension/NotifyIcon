@@ -8,17 +8,15 @@ using AppKit;
 using Foundation;
 using CoreGraphics;
 #endif
-#if NET5_0_OR_GREATER || NET6_0_MACOS10_14
-using System.Runtime.Versioning;
-#endif
 using System.IO;
-using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Runtime.Versioning;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 
 namespace System.Windows
 {
-#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER2
     [SupportedOSPlatform("macos")]
 #endif
     internal sealed class MacNotifyIcon : NotifyIcon
@@ -105,7 +103,7 @@ namespace System.Windows
             }
         }
 
-#if NET5_0_OR_GREATER || NET6_0_MACOS10_14
+#if NET5_0_OR_GREATER2
         [UnsupportedOSPlatform("macos10.10")]
 #endif
         public override object? Icon
@@ -113,7 +111,7 @@ namespace System.Windows
             set => statusItem!.Image = Convert(value);
         }
 
-#if NET5_0_OR_GREATER || NET6_0_MACOS10_14
+#if NET5_0_OR_GREATER2
         [UnsupportedOSPlatform("macos10.10")]
 #endif
         public override string? Text

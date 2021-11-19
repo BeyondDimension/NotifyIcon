@@ -1,19 +1,17 @@
 #if !XAMARIN_MAC && !__MACOS__ && !NET6_0_MACOS10_14 && !NETSTANDARD1_0 && !NETSTANDARD1_1
-#if NET5_0_OR_GREATER
-using System.Runtime.Versioning;
-#endif
 #if DRAWING || NETFRAMEWORK
 using System.Drawing;
 #endif
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Linq;
+using System.ComponentModel;
+using System.Runtime.Versioning;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace System.Windows
 {
-#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER2
     [SupportedOSPlatform("windows")]
 #endif
     internal sealed class WindowsNotifyIcon : NotifyIcon
@@ -163,7 +161,7 @@ namespace System.Windows
         sealed class NOTIFYICONDATA
         {
             public int cbSize =
-#if NETFRAMEWORK && NET451_OR_GREATER
+#if (NETFRAMEWORK && NET451_OR_GREATER) || NET5_0_OR_GREATER2
                 Marshal.SizeOf<NOTIFYICONDATA>();
 #else
                 Marshal.SizeOf(typeof(NOTIFYICONDATA));
