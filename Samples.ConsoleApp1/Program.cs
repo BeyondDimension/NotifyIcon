@@ -1,13 +1,19 @@
+#if !MACOS
 using Gtk;
+#endif
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using System.Windows;
 
+#if !MACOS
 [assembly: SupportedOSPlatform("windows")]
+#endif
 [assembly: SupportedOSPlatform("macos")]
+#if !MACOS
 [assembly: SupportedOSPlatform("linux")]
+#endif
 
 namespace Samples.ConsoleApp1
 {
@@ -26,6 +32,7 @@ namespace Samples.ConsoleApp1
 
             Console.WriteLine(Text);
 
+#if !MACOS
             Window? window = null;
             if (OperatingSystem2.IsLinux)
             {
@@ -41,7 +48,11 @@ namespace Samples.ConsoleApp1
 
                 window.ShowAll();
             }
+#endif
+
+#if !MACOS
             if (OperatingSystem2.IsMacOS)
+#endif
             {
                 AppDelegate.Init();
             }
@@ -54,6 +65,7 @@ namespace Samples.ConsoleApp1
                 e.Cancel = true;
             };
 
+#if !MACOS
             if (OperatingSystem2.IsLinux)
             {
                 notifyIcon.Click += (_, _) =>
@@ -66,6 +78,7 @@ namespace Samples.ConsoleApp1
                 };
                 Task.Factory.StartNew(Application.Run);
             }
+#endif
 
             tcs.Task.GetAwaiter().GetResult();
 
@@ -84,10 +97,12 @@ namespace Samples.ConsoleApp1
         static void Shutdown()
         {
             tcs.TrySetResult();
+#if !MACOS
             if (OperatingSystem2.IsLinux)
             {
                 Application.Quit();
             }
+#endif
         }
     }
 }

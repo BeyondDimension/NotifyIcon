@@ -94,13 +94,16 @@ namespace System.Windows
         public abstract event EventHandler<MouseEventArgs>? RightClick;
 
         /// <summary>
-        /// 在任务栏中显示具有指定标题、文本和图标的气球状提示（仅支持 Windows）。
+        /// 在任务栏中显示具有指定标题、文本和图标的气球状提示（仅支持 Windows Or Xamarin.Mac Or net6.0-macos）。
         /// </summary>
         /// <param name="tipTitle">提示标题。</param>
         /// <param name="tipText">提示文本。</param>
         /// <param name="tipIcon">提示图标。</param>
 #if NET5_0_OR_GREATER2
         [SupportedOSPlatform("windows")]
+#if NET6_0_MACOS
+        [SupportedOSPlatform("macos10.14")]
+#endif
 #endif
         public virtual void ShowBalloonTip(string tipTitle, string tipText, ToolTipIcon tipIcon)
             => throw new PlatformNotSupportedException();
@@ -194,16 +197,35 @@ namespace System.Windows
 
         static Type GetImplType() => GetImplTypeCore() ?? throw new NotSupportedException("You will need to install one of the following packages, Install-Package NotifyIcon or Install-Package NotifyIcon.Windows or Install-Package NotifyIcon.Linux or Install-Package NotifyIcon.Mac");
 
+#if !(XAMARIN_MAC || __MACOS__ || NET6_0_MACOS)
+        static Type? GetWindowsImplType() => Type.GetType("System.Windows.WindowsNotifyIcon, System.Windows.NotifyIcon.Windows") ??
+            Type.GetType("System.Windows.WindowsNotifyIcon, System.Windows.NotifyIcon.Platform");
+#endif
+
+#if !(WINDOWS || NET5_0_WINDOWS || NET6_0_WINDOWS)
+        static Type? GetMacOSImplType() => Type.GetType("System.Windows.MacNotifyIcon, System.Windows.NotifyIcon.Mac") ??
+                    Type.GetType("System.Windows.MacNotifyIcon, System.Windows.NotifyIcon.Platform");
+#endif
+
+#if !(XAMARIN_MAC || __MACOS__ || NET6_0_MACOS) && !(WINDOWS || NET5_0_WINDOWS || NET6_0_WINDOWS)
+        static Type? GetLinuxImplType() => Type.GetType("System.Windows.LinuxNotifyIcon, System.Windows.NotifyIcon.Linux") ??
+                    Type.GetType("System.Windows.LinuxNotifyIcon, System.Windows.NotifyIcon.Platform");
+#endif
+
         static Type? GetImplTypeCore()
         {
+#if XAMARIN_MAC || __MACOS__ || NET6_0_MACOS
+            return GetMacOSImplType();
+#elif WINDOWS || NET5_0_WINDOWS || NET6_0_WINDOWS
+            return GetWindowsImplType();
+#else
             if (OperatingSystem2.IsWindows
 #if !__LIB_SYS_OS2__
             ()
 #endif
                 )
             {
-                return Type.GetType("System.Windows.WindowsNotifyIcon, System.Windows.NotifyIcon.Windows") ??
-                    Type.GetType("System.Windows.WindowsNotifyIcon, System.Windows.NotifyIcon.Platform");
+                return GetWindowsImplType();
             }
             else if (OperatingSystem2.IsMacOS
 #if !__LIB_SYS_OS2__
@@ -211,8 +233,7 @@ namespace System.Windows
 #endif
                 )
             {
-                return Type.GetType("System.Windows.MacNotifyIcon, System.Windows.NotifyIcon.Mac") ??
-                    Type.GetType("System.Windows.MacNotifyIcon, System.Windows.NotifyIcon.Platform");
+                return GetMacOSImplType();
             }
             else if (OperatingSystem2.IsAndroid
 #if !__LIB_SYS_OS2__
@@ -228,10 +249,10 @@ namespace System.Windows
 #endif
                 )
             {
-                return Type.GetType("System.Windows.LinuxNotifyIcon, System.Windows.NotifyIcon.Linux") ??
-                    Type.GetType("System.Windows.LinuxNotifyIcon, System.Windows.NotifyIcon.Platform");
+                return GetLinuxImplType();
             }
             return null;
+#endif
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using MonoMac.CoreGraphics;
 using AppKit;
 using Foundation;
 using CoreGraphics;
+using UserNotifications;
 #endif
 using System.IO;
 using System.ComponentModel;
@@ -255,6 +256,34 @@ namespace System.Windows
                 }
             }
         }
+
+#if !MONO_MAC
+        public override void ShowBalloonTip(string tipTitle, string tipText, ToolTipIcon tipIcon)
+        {
+            // https://docs.microsoft.com/en-us/dotnet/api/usernotifications.unusernotificationcenter?view=xamarin-mac-sdk-14
+            // https://github.com/davidortinau/WeatherTwentyOne/blob/main/src/WeatherTwentyOne/Platforms/MacCatalyst/NotificationService.cs
+
+            UNUserNotificationCenter.Current.RequestAuthorization(UNAuthorizationOptions.Alert, (approved, err) =>
+            {
+                if (!approved)
+                    return;
+
+                var content = new UNMutableNotificationContent()
+                {
+                    Title = tipTitle,
+                    Body = tipText,
+                };
+
+                var trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(0.25, false);
+                var request = UNNotificationRequest.FromIdentifier(Guid.NewGuid().ToString(), content, trigger);
+                UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
+                {
+                    if (err != null)
+                        throw new Exception($"Failed to schedule notification: {err}");
+                });
+            });
+        }
+#endif
     }
 }
 #endif

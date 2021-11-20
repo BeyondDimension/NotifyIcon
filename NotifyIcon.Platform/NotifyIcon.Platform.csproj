@@ -1,13 +1,13 @@
 <Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.0;net35;net40;net45;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.0;net35;net40;net45;net5.0;net5.0-windows;net6.0;net6.0-windows;net6.0-macos;Xamarin.Mac20</TargetFrameworks>
     <AssemblyName>System.Windows.NotifyIcon</AssemblyName>
     <RootNamespace>System.Windows</RootNamespace>
     <Description>在通知区域创建图标的组件。</Description>
     <PackageId>NotifyIcon.Base</PackageId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" !$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('net6')) AND !$(TargetFramework.StartsWith('Xamarin.Mac20')) ">

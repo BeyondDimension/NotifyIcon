@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net6.0-macos</TargetFrameworks>
+    <!--<TargetFrameworks>net6.0</TargetFrameworks>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -12,6 +13,10 @@
        -->
       .allowedextension
     </AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.Contains('-macos')) ">
+    <SupportedOSPlatformVersion>10.14</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) OR $(TargetFramework.Contains('-macos'))">

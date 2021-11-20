@@ -26,6 +26,7 @@ namespace Samples
             notifyIcon.Text = "My Notify Icon";
             notifyIcon.Icon = Icon;
             var count = 8;
+            var typeUNUserNotificationCenter = Type.GetType("UserNotifications.UNUserNotificationCenter, Xamarin.Mac");
             var menuItems = Enumerable.Range(1, count)
                 .Select(x =>
                 {
@@ -37,7 +38,7 @@ namespace Samples
                     menuItem.Command = ReactiveCommand.Create(() =>
                     {
                         var text = $"Menu Item {x}({index++})";
-                        if (OperatingSystem2.IsWindows && x == count)
+                        if (x == count && (OperatingSystem2.IsWindows || typeUNUserNotificationCenter != null))
                         {
                             notifyIcon.ShowBalloonTip("My Title", text,
                                 toolTipIcons[random.Next(toolTipIcons.Length)]);

@@ -1,15 +1,14 @@
 <Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <!--<TargetFrameworks>netstandard2.0;net461;net6.0-macos;Xamarin.Mac20</TargetFrameworks>-->
-    <TargetFrameworks>netstandard2.0;net461;net6.0-macos</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;net6.0-macos;Xamarin.Mac20</TargetFrameworks>
     <AssemblyName>System.Windows.NotifyIcon.Mac</AssemblyName>
     <RootNamespace>System.Windows</RootNamespace>
     <Description>在通知区域创建图标的组件的 macOS 实现。</Description>
     <PackageId>NotifyIcon.Mac</PackageId>
     <DefineConstants>MAC;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(TargetFramework.Contains('-macos')) ">
