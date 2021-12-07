@@ -8,8 +8,8 @@
 		<Company>长沙次元超越科技有限公司</Company>
 		<Product>NotifyIcon</Product>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/SteamTools-Team/NotifyIcon</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/SteamTools-Team/NotifyIcon.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/BeyondDimension/NotifyIcon</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/BeyondDimension/NotifyIcon.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>NotifyIcon TrayIcon</PackageTags>
 		<DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
