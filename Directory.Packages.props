@@ -1,5 +1,6 @@
 <Project>
 	<ItemGroup>
+		<PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
 		<PackageVersion Include="MonoMac.NetStandard" Version="0.0.4" />
 		<PackageVersion Include="OperatingSystem2" Version="1.4.2" />
 		<PackageVersion Include="GtkSharp" Version="3.24.24.34" />

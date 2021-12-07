@@ -8,7 +8,7 @@
     <PackageId>NotifyIcon.Linux</PackageId>
     <DefineConstants>LINUX;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.0.5</Version>
+    <Version>1.0.5.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

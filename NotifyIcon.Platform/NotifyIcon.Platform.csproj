@@ -7,7 +7,7 @@
     <Description>在通知区域创建图标的组件。</Description>
     <PackageId>NotifyIcon.Base</PackageId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.0.5</Version>
+    <Version>1.0.5.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" !$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('net6')) AND !$(TargetFramework.StartsWith('Xamarin.Mac20')) ">
