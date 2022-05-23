@@ -9,6 +9,8 @@ namespace Samples.MauiApp1
 {
     partial class MauiProgram
     {
+        static event Action? Exit;
+
         [DllImport("Microsoft.ui.xaml.dll")]
         static extern void XamlCheckProcessRequirements();
 
@@ -22,33 +24,15 @@ namespace Samples.MauiApp1
                 var context = new DispatcherQueueSynchronizationContext(DispatcherQueue.GetForCurrentThread());
                 SynchronizationContext.SetSynchronizationContext(context);
 
-                var services = new ServiceCollection();
-                ConfigureServices(services);
-                value = services.BuildServiceProvider();
-
                 var app = new WinUIApp();
-
-                var notifyIcon = value.GetRequiredService<NotifyIcon>();
-                Exit += (_, _) =>
+                Exit += () =>
                 {
+                    var notifyIcon = app.Services.GetRequiredService<NotifyIcon>();
                     notifyIcon.Dispose();
                 };
-                NotifyIconHelper.Init(notifyIcon, app.Exit);
             });
 
-            Exit?.Invoke(null, EventArgs.Empty);
-        }
-
-        static IServiceProvider? value;
-        static event EventHandler? Exit;
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="services"></param>
-        static void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton(typeof(NotifyIcon), NotifyIcon.ImplType);
+            Exit?.Invoke();
         }
     }
 }

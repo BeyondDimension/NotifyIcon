@@ -21,7 +21,7 @@ namespace Samples
         /// </summary>
         /// <param name="notifyIcon"></param>
         /// <param name="exit"></param>
-        public static void Init(NotifyIcon notifyIcon, Action exit)
+        public static void Init(NotifyIcon notifyIcon, Action? exit)
         {
             notifyIcon.Text = "My Notify Icon";
             notifyIcon.Icon = Icon;
@@ -62,10 +62,7 @@ namespace Samples
             notifyIcon.ContextMenuStrip.Items.Add(new()
             {
                 Text = "Exit",
-                Command = ReactiveCommand.Create(() =>
-                {
-                    exit();
-                }),
+                Command = ReactiveCommand.Create(() => exit?.Invoke()),
             });
         }
     }

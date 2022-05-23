@@ -4,7 +4,7 @@ using System;
 
 namespace Samples.MauiApp1
 {
-    class Program : MauiApplication
+    class Program : MauiApplication, MauiProgram.IPlatformApplication
     {
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
@@ -12,6 +12,10 @@ namespace Samples.MauiApp1
         {
             var app = new Program();
             app.Run(args);
+        }
+
+        void MauiProgram.IPlatformApplication.Exit()
+        {
         }
     }
 }

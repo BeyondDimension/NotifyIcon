@@ -12,7 +12,9 @@ namespace Samples.WpfApp1
     /// </summary>
     public partial class App : Application
     {
-        IServiceProvider? value;
+        IServiceProvider? services;
+
+        public IServiceProvider Services => services ?? throw new ArgumentNullException(nameof(services));
 
         /// <summary>
         ///
@@ -24,9 +26,9 @@ namespace Samples.WpfApp1
 
             var services = new ServiceCollection();
             ConfigureServices(services);
-            value = services.BuildServiceProvider();
+            this.services = services.BuildServiceProvider();
 
-            var notifyIcon = value.GetRequiredService<NotifyIcon>();
+            var notifyIcon = this.services.GetRequiredService<NotifyIcon>();
             Exit += (_, _) =>
             {
                 notifyIcon.Dispose();
