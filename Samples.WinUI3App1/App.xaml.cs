@@ -28,7 +28,6 @@ namespace Samples.WinUI3App1
     /// </summary>
     public partial class App : Application
     {
-        readonly Action<IServiceCollection>? configureServices;
         IServiceProvider? services;
 
         public IServiceProvider Services => services ?? throw new ArgumentNullException(nameof(services));

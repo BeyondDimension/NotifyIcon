@@ -10,8 +10,6 @@ namespace Samples.MauiApp1.WinUI
     /// </summary>
     public partial class App : MauiWinUIApplication, MauiProgram.IPlatformApplication
     {
-        readonly Action<IServiceCollection>? configureServices;
-
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
