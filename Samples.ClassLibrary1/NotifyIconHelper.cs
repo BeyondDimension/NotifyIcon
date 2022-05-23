@@ -14,7 +14,7 @@ namespace Samples
         static readonly Random random = new();
         static readonly ToolTipIcon[] toolTipIcons = (ToolTipIcon[])Enum.GetValues(typeof(ToolTipIcon));
 
-        static object Icon => OperatingSystem2.IsMacOS ? Resources.Icon_16 : Resources.Icon;
+        static object Icon => OperatingSystem2.IsMacOS() ? Resources.Icon_16 : Resources.Icon;
 
         /// <summary>
         ///
@@ -32,13 +32,13 @@ namespace Samples
                 {
                     var menuItem = new ContextMenuStrip.MenuItem
                     {
-                        Text = OperatingSystem2.IsWindows && x == count ? "Test Balloon Tip" : $"Menu Item {x}",
+                        Text = OperatingSystem2.IsWindows() && x == count ? "Test Balloon Tip" : $"Menu Item {x}",
                     };
                     var index = 1;
                     menuItem.Command = ReactiveCommand.Create(() =>
                     {
                         var text = $"Menu Item {x}({index++})";
-                        if (x == count && (OperatingSystem2.IsWindows || typeUNUserNotificationCenter != null))
+                        if (x == count && (OperatingSystem2.IsWindows() || typeUNUserNotificationCenter != null))
                         {
                             notifyIcon.ShowBalloonTip("My Title", text,
                                 toolTipIcons[random.Next(toolTipIcons.Length)]);

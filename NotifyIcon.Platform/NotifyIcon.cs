@@ -219,35 +219,19 @@ namespace System.Windows
 #elif WINDOWS || NET5_0_WINDOWS || NET6_0_WINDOWS
             return GetWindowsImplType();
 #else
-            if (OperatingSystem2.IsWindows
-#if !__LIB_SYS_OS2__
-            ()
-#endif
-                )
+            if (OperatingSystem2.IsWindows())
             {
                 return GetWindowsImplType();
             }
-            else if (OperatingSystem2.IsMacOS
-#if !__LIB_SYS_OS2__
-            ()
-#endif
-                )
+            else if (OperatingSystem2.IsMacOS())
             {
                 return GetMacOSImplType();
             }
-            else if (OperatingSystem2.IsAndroid
-#if !__LIB_SYS_OS2__
-            ()
-#endif
-                )
+            else if (OperatingSystem2.IsAndroid())
             {
                 return null;
             }
-            else if (OperatingSystem2.IsLinux
-#if !__LIB_SYS_OS2__
-            ()
-#endif
-                )
+            else if (OperatingSystem2.IsLinux())
             {
                 return GetLinuxImplType();
             }

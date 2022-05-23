@@ -8,7 +8,7 @@
     <PackageId>NotifyIcon</PackageId>
     <DefineConstants>MULTIPLE_PLATFORM;$(DefineConstants)</DefineConstants>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.0.5.1</Version>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" $(TargetFramework.Contains('-windows')) ">
@@ -41,6 +41,10 @@
 
   <PropertyGroup Condition=" !$(TargetFramework.StartsWith('net5')) AND !$(TargetFramework.StartsWith('net6')) AND !$(TargetFramework.StartsWith('Xamarin.Mac20')) ">
     <DefineConstants>__LIB_SYS_OS2__;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" $(TargetFramework.Contains('-windows'))">
+    <DefineConstants>NET_WINDOWS;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition=" $(DefineConstants.Contains('MONO_MAC')) ">

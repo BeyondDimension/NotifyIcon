@@ -50,3 +50,5 @@ notifyIcon.ContextMenuStrip.Items.Add(new ContextMenuStrip.MenuItem() { Text = "
 | NotifyIcon for WPF          | Samples.WpfApp1.csproj              |
 | NotifyIcon for Console      | Samples.ConsoleApp1.csproj          |
 | NotifyIcon for Avalonia     | Samples.AvaloniaApp1.csproj         |
+| NotifyIcon for WinUI3       | Samples.WinUI3App1.csproj           |
+| NotifyIcon for MAUI         | Samples.MauiApp1.csproj             |

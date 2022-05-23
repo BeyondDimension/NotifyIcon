@@ -27,9 +27,7 @@ namespace Samples.AvaloniaApp1
 
         internal static IServiceProvider Services => services ?? throw new ArgumentNullException(nameof(services));
 
-        public static bool IsLinux
-        //=> OperatingSystem2.IsWindows;
-        => OperatingSystem2.IsLinux;
+        public static bool IsLinux => OperatingSystem2.IsLinux();
 
         // Initialization code. Don't use any Avalonia, third-party APIs or any
         // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -46,13 +44,13 @@ namespace Samples.AvaloniaApp1
                 ConfigureServices(services);
                 Program.services = services.BuildServiceProvider();
 
-                if (IsLinuxNotifyIconProcess && OperatingSystem2.IsLinux)
+                if (IsLinuxNotifyIconProcess && OperatingSystem2.IsLinux())
                 {
                     // https://www.mono-project.com/docs/gui/gtksharp/widgets/notification-icon/
                     // Initialize GTK#
                     GtkApplication.Init();
                 }
-                if (OperatingSystem2.IsMacOS)
+                if (OperatingSystem2.IsMacOS())
                 {
                     AppDelegate.Init();
                 }
@@ -72,7 +70,7 @@ namespace Samples.AvaloniaApp1
                     NotifyIconHelper.Init(notifyIcon, Shutdown);
                     if (IsLinuxNotifyIconProcess)
                     {
-                        if (OperatingSystem2.IsLinux)
+                        if (OperatingSystem2.IsLinux())
                         {
                             GtkApplication.Run();
                             callBuildAvaloniaApp = false;

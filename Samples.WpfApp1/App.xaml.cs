@@ -38,7 +38,7 @@ namespace Samples.WpfApp1
         ///
         /// </summary>
         /// <param name="services"></param>
-        public void ConfigureServices(IServiceCollection services)
+        static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(typeof(NotifyIcon), NotifyIcon.ImplType);
         }

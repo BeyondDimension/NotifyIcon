@@ -34,7 +34,7 @@ namespace Samples.ConsoleApp1
 
 #if !MACOS
             Window? window = null;
-            if (OperatingSystem2.IsLinux)
+            if (OperatingSystem2.IsLinux())
             {
                 // https://www.mono-project.com/docs/gui/gtksharp/widgets/notification-icon/
                 // Initialize GTK#
@@ -51,7 +51,7 @@ namespace Samples.ConsoleApp1
 #endif
 
 #if !MACOS
-            if (OperatingSystem2.IsMacOS)
+            if (OperatingSystem2.IsMacOS())
 #endif
             {
                 AppDelegate.Init();
@@ -66,7 +66,7 @@ namespace Samples.ConsoleApp1
             };
 
 #if !MACOS
-            if (OperatingSystem2.IsLinux)
+            if (OperatingSystem2.IsLinux())
             {
                 notifyIcon.Click += (_, _) =>
                 {
@@ -98,7 +98,7 @@ namespace Samples.ConsoleApp1
         {
             tcs.TrySetResult();
 #if !MACOS
-            if (OperatingSystem2.IsLinux)
+            if (OperatingSystem2.IsLinux())
             {
                 Application.Quit();
             }

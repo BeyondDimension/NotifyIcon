@@ -2,26 +2,28 @@
 	<ItemGroup>
 		<PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
 		<PackageVersion Include="MonoMac.NetStandard" Version="0.0.4" />
-		<PackageVersion Include="OperatingSystem2" Version="1.4.2.1" />
-		<PackageVersion Include="GtkSharp" Version="3.24.24.34" />
+		<PackageVersion Include="OperatingSystem2" Version="2.0.0" />
+		<PackageVersion Include="GtkSharp" Version="3.24.24.38" />
 		<PackageVersion Include="System.Drawing.Common" Version="6.0.0" Condition=" $(TargetFramework.StartsWith('net6')) " />
 		<PackageVersion Include="System.Drawing.Common" Version="5.0.3" Condition=" $(TargetFramework.StartsWith('net5')) " />
 		<PackageVersion Include="System.Drawing.Common" Version="4.6.0" Condition=" $(TargetFramework.StartsWith('netstandard2')) " />
 		<PackageVersion Include="Microsoft.Win32.Primitives" Version="4.3.0" />
-		<PackageVersion Include="ReactiveUI" Version="16.3.10" />
-		<PackageVersion Include="Avalonia" Version="0.10.10" />
-		<PackageVersion Include="Avalonia.Desktop" Version="0.10.10" />
-		<PackageVersion Include="Avalonia.Diagnostics" Version="0.10.10" />
+		<PackageVersion Include="ReactiveUI" Version="18.0.10" />
+		<PackageVersion Include="Avalonia" Version="0.10.14" />
+		<PackageVersion Include="Avalonia.Desktop" Version="0.10.14" />
+		<PackageVersion Include="Avalonia.Diagnostics" Version="0.10.14" />
 		<PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 		<PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-		<PackageVersion Include="HarfBuzzSharp" Version="2.8.2-preview.155" />
-		<PackageVersion Include="HarfBuzzSharp.NativeAssets.Linux" Version="2.8.2-preview.155" />
-		<PackageVersion Include="SkiaSharp" Version="2.88.0-preview.155" />
-		<PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0-preview.155" />
-		<PackageVersion Include="NotifyIcon.Base" Version="1.0.5" />
-		<PackageVersion Include="NotifyIcon" Version="1.0.5" />
-		<PackageVersion Include="NotifyIcon.Windows" Version="1.0.5" />
-		<PackageVersion Include="NotifyIcon.Mac" Version="1.0.5" />
-		<PackageVersion Include="NotifyIcon.Linux" Version="1.0.5" />
+		<PackageVersion Include="HarfBuzzSharp" Version="2.8.2" />
+		<PackageVersion Include="HarfBuzzSharp.NativeAssets.Linux" Version="2.8.2" />
+		<PackageVersion Include="SkiaSharp" Version="2.88.0" />
+		<PackageVersion Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0" />
+		<PackageVersion Include="NotifyIcon.Base" Version="1.1.0" />
+		<PackageVersion Include="NotifyIcon" Version="1.1.0" />
+		<PackageVersion Include="NotifyIcon.Windows" Version="1.1.0" />
+		<PackageVersion Include="NotifyIcon.Mac" Version="1.1.0" />
+		<PackageVersion Include="NotifyIcon.Linux" Version="1.1.0" />
+		<PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.0.3" />
+		<PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.194" />
 	</ItemGroup>
 </Project>

@@ -94,11 +94,11 @@ namespace Samples.AvaloniaApp1
 
                     Program.Services.GetRequiredService<NotifyIcon>().Dispose();
 
-                    if (OperatingSystem2.IsLinux)
+                    if (OperatingSystem2.IsLinux())
                     {
                         GtkApplication.Quit();
                     }
-                    if (OperatingSystem2.IsWindows)
+                    if (OperatingSystem2.IsWindows())
                     {
                         if (App.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                         {
