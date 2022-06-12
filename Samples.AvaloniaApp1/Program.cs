@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
+using Avalonia.ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Runtime.Versioning;
@@ -92,8 +93,9 @@ namespace Samples.AvaloniaApp1
         // Avalonia configuration, don't remove; also used by visual designer.
         static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-               .UsePlatformDetect()
-               .LogToTrace();
+                .UseReactiveUI()
+                .UsePlatformDetect()
+                .LogToTrace();
 
         /// <summary>
         ///

@@ -31,6 +31,7 @@
 
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <!-- Samples.MauiApp1.csproj : error NU1009: 已隐式引用包 Microsoft.Windows.SDK.BuildTools 。通常无需从项目或中央包版本管理文件中引用它们。有关详细信息，请参 阅 https://aka.ms/sdkimplicitrefs -->
+    <WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
 
   <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">

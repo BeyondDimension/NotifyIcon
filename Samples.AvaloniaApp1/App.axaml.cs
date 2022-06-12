@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using Samples.AvaloniaApp1.ViewModels;
 using System;
 using System.Windows;
 
@@ -16,6 +17,11 @@ namespace Samples.AvaloniaApp1
         NotifyIconPipeServer? notifyIconPipeServer;
 
         public static new App? Current => Application.Current is App app ? app : null;
+
+        public App()
+        {
+            DataContext = new ApplicationViewModel();
+        }
 
         /// <summary>
         ///

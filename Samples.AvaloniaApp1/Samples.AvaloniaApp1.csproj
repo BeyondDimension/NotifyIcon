@@ -27,6 +27,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="..\Samples.ConsoleApp1\AppDelegate.cs" />
   </ItemGroup>
 
@@ -34,6 +42,7 @@
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Desktop" />
     <PackageReference Include="Avalonia.Diagnostics" />
+    <PackageReference Include="Avalonia.ReactiveUI" />
     <PackageReference Include="OperatingSystem2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="MonoMac.NetStandard" />
