@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461;net6.0-macos;net7.0-macos</TargetFrameworks>
+    <AssemblyName>System.Windows.NotifyIcon.Mac</AssemblyName>
+    <RootNamespace>System.Windows</RootNamespace>
+    <Description>在通知区域创建图标的组件的 macOS 实现。</Description>
+    <PackageId>NotifyIcon.Mac</PackageId>
+    <DefineConstants>MAC;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
+  </ItemGroup>
+  
+  <Import Project="..\GeneratePackage.props" />
+</Project>

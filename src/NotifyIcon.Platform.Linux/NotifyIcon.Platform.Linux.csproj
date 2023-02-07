@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
+    <AssemblyName>System.Windows.NotifyIcon.Linux</AssemblyName>
+    <RootNamespace>System.Windows</RootNamespace>
+    <Description>在通知区域创建图标的组件的 Linux 实现。</Description>
+    <PackageId>NotifyIcon.Linux</PackageId>
+    <DefineConstants>LINUX;SINGLE_PLATFORM;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GtkSharp" />
+  </ItemGroup>
+
+  <Import Project="..\GeneratePackage.props" />
+</Project>

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard1.0;net35;net40;net45;net6.0;net6.0-windows;net6.0-macos;net7.0-windows;net7.0-macos</TargetFrameworks>
+    <AssemblyName>System.Windows.NotifyIcon</AssemblyName>
+    <RootNamespace>System.Windows</RootNamespace>
+    <Description>在通知区域创建图标的组件。</Description>
+    <PackageId>NotifyIcon.Base</PackageId>
+  </PropertyGroup>
+
+  <Import Project="..\GeneratePackage.props" />
+</Project>

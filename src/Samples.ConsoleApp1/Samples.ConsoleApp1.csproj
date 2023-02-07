@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net7.0;net7.0-macos</TargetFrameworks>
+    <!--<TargetFrameworks>net7.0</TargetFrameworks>-->
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <AllowedReferenceRelatedFileExtensions>
+      <!-- Prevent default XML and PDB files copied to output in RELEASE. 
+           Only *.allowedextension files will be included, which doesn't exist in my case.
+       -->
+      .allowedextension
+    </AllowedReferenceRelatedFileExtensions>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon\NotifyIcon.csproj" />
+    <ProjectReference Include="..\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OperatingSystem2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="MonoMac.NetStandard" />
+  </ItemGroup>
+
+</Project>

@@ -3,37 +3,40 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon", "NotifyIcon\NotifyIcon.csproj", "{11739B05-8E34-4BC0-9678-62D4E93AC0EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon", "src\NotifyIcon\NotifyIcon.csproj", "{11739B05-8E34-4BC0-9678-62D4E93AC0EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon.Platform.Windows", "NotifyIcon.Platform.Windows\NotifyIcon.Platform.Windows.csproj", "{BA5F675C-1D3B-413D-95CC-7337DE01B1CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon.Platform.Windows", "src\NotifyIcon.Platform.Windows\NotifyIcon.Platform.Windows.csproj", "{BA5F675C-1D3B-413D-95CC-7337DE01B1CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon.Platform.Linux", "NotifyIcon.Platform.Linux\NotifyIcon.Platform.Linux.csproj", "{1D643B0B-B5EE-4E94-AF12-F782BE504D7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon.Platform.Linux", "src\NotifyIcon.Platform.Linux\NotifyIcon.Platform.Linux.csproj", "{1D643B0B-B5EE-4E94-AF12-F782BE504D7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon.Platform.Mac", "NotifyIcon.Platform.Mac\NotifyIcon.Platform.Mac.csproj", "{CB9327D1-DA24-4984-A4D7-B30C1C89E75C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon.Platform.Mac", "src\NotifyIcon.Platform.Mac\NotifyIcon.Platform.Mac.csproj", "{CB9327D1-DA24-4984-A4D7-B30C1C89E75C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon.Platform", "NotifyIcon.Platform\NotifyIcon.Platform.csproj", "{ECD79BE3-1CC5-4260-A217-AF18069D5BA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotifyIcon.Platform", "src\NotifyIcon.Platform\NotifyIcon.Platform.csproj", "{ECD79BE3-1CC5-4260-A217-AF18069D5BA8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.WpfApp1", "Samples.WpfApp1\Samples.WpfApp1.csproj", "{EA6EF25C-CD06-4AC1-91C5-7E256053DE3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.WpfApp1", "src\Samples.WpfApp1\Samples.WpfApp1.csproj", "{EA6EF25C-CD06-4AC1-91C5-7E256053DE3C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.ClassLibrary1", "Samples.ClassLibrary1\Samples.ClassLibrary1.csproj", "{285875B7-5876-4F36-9875-A5E5D3F5F66D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.ClassLibrary1", "src\Samples.ClassLibrary1\Samples.ClassLibrary1.csproj", "{285875B7-5876-4F36-9875-A5E5D3F5F66D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6C5ED0D5-9B78-4C87-995C-A0D792840D63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.ConsoleApp1", "src\Samples.ConsoleApp1\Samples.ConsoleApp1.csproj", "{788CBDD6-1490-4FED-A884-0A4302070A4E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.AvaloniaApp1", "src\Samples.AvaloniaApp1\Samples.AvaloniaApp1.csproj", "{E79A8246-B65D-4631-8922-D02175133FE9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.WinUI3App1", "src\Samples.WinUI3App1\Samples.WinUI3App1.csproj", "{962EE8A8-AE35-4840-9CAE-8DD2ADE3B172}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.MauiApp1", "src\Samples.MauiApp1\Samples.MauiApp1.csproj", "{E30BC9EF-AE40-4EAF-8BA6-63143BD17E32}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{0364A0F8-4A8C-4385-89D2-4EADDE50577F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Root", "_Root", "{F3E4E683-51F2-470B-BCA8-055E5CAA8C4A}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
+		src\.editorconfig = src\.editorconfig
 		.gitignore = .gitignore
-		Directory.Build.props = Directory.Build.props
-		Directory.Packages.props = Directory.Packages.props
-		global.json = global.json
+		src\Directory.Build.props = src\Directory.Build.props
+		ref\DirectoryPackages\Directory.Packages.props = ref\DirectoryPackages\Directory.Packages.props
+		src\GeneratePackage.props = src\GeneratePackage.props
+		src\ImplicitUsings.cs = src\ImplicitUsings.cs
 		README.md = README.md
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.ConsoleApp1", "Samples.ConsoleApp1\Samples.ConsoleApp1.csproj", "{788CBDD6-1490-4FED-A884-0A4302070A4E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.AvaloniaApp1", "Samples.AvaloniaApp1\Samples.AvaloniaApp1.csproj", "{E79A8246-B65D-4631-8922-D02175133FE9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.WinUI3App1", "Samples.WinUI3App1\Samples.WinUI3App1.csproj", "{962EE8A8-AE35-4840-9CAE-8DD2ADE3B172}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.MauiApp1", "Samples.MauiApp1\Samples.MauiApp1.csproj", "{E30BC9EF-AE40-4EAF-8BA6-63143BD17E32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -234,6 +237,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EA6EF25C-CD06-4AC1-91C5-7E256053DE3C} = {0364A0F8-4A8C-4385-89D2-4EADDE50577F}
+		{285875B7-5876-4F36-9875-A5E5D3F5F66D} = {0364A0F8-4A8C-4385-89D2-4EADDE50577F}
+		{788CBDD6-1490-4FED-A884-0A4302070A4E} = {0364A0F8-4A8C-4385-89D2-4EADDE50577F}
+		{E79A8246-B65D-4631-8922-D02175133FE9} = {0364A0F8-4A8C-4385-89D2-4EADDE50577F}
+		{962EE8A8-AE35-4840-9CAE-8DD2ADE3B172} = {0364A0F8-4A8C-4385-89D2-4EADDE50577F}
+		{E30BC9EF-AE40-4EAF-8BA6-63143BD17E32} = {0364A0F8-4A8C-4385-89D2-4EADDE50577F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BDE162C9-AE66-456E-97B7-F84AC8337E96}

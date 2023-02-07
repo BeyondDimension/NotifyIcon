@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net6.0-windows;net6.0-macos;net7.0;net7.0-windows;net7.0-macos;netstandard2.0;net35;net40;net45;net461</TargetFrameworks>
+    <AssemblyName>System.Windows.NotifyIcon.Platform</AssemblyName>
+    <RootNamespace>System.Windows</RootNamespace>
+    <Description>在通知区域创建图标的组件（运行时自动匹配平台实现）。</Description>
+    <PackageId>NotifyIcon</PackageId>
+    <DefineConstants>MULTIPLE_PLATFORM;$(DefineConstants)</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\NotifyIcon.Platform.Linux\LinuxNotifyIcon.cs" />
+    <Compile Include="..\NotifyIcon.Platform.Mac\MacNotifyIcon.cs" />
+    <Compile Include="..\NotifyIcon.Platform.Windows\WindowsNotifyIcon.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\GeneratePackage.props" />
+</Project>

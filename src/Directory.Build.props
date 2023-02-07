@@ -1,0 +1,113 @@
+<Project>
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);NU1507;1591;SA1612;IL2026</NoWarn>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<ImplicitUsings>false</ImplicitUsings>
+		<!--<IsTrimmable>true</IsTrimmable>-->
+		<RepositoryType>git</RepositoryType>
+		<Version>1.23.10207.11603</Version>
+		<Copyright>©️ 长沙次元超越科技有限公司. All rights reserved.</Copyright>
+		<Company>长沙次元超越科技有限公司</Company>
+		<FileVersion>$(Version)</FileVersion>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\ImplicitUsings.cs">
+			<LinkBase>Properties</LinkBase>
+		</Compile>
+	</ItemGroup>
+
+	<PropertyGroup Condition=" Exists('$(MSBuildProjectDirectory)\..\NotifyIcon.snk') ">
+		<DefineConstants>SIGN_ASSEMBLY;$(DefineConstants)</DefineConstants>
+		<SignAssembly>true</SignAssembly>
+		<DelaySign>false</DelaySign>
+		<AssemblyOriginatorKeyFile>..\NotifyIcon.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" $(TargetFramework.Contains('-windows')) ">
+		<SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" $(TargetFramework.Contains('-macos')) ">
+		<SupportedOSPlatformVersion>10.14</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" !$(TargetFramework.StartsWith('net5')) 
+				   AND !$(TargetFramework.StartsWith('net6')) 
+				   AND !$(TargetFramework.StartsWith('net7')) 
+				   AND !$(TargetFramework.StartsWith('net8')) 
+				   AND !$(TargetFramework.StartsWith('Xamarin.Mac20')) ">
+		<DefineConstants>__LIB_SYS_OS2__;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) 
+				   OR $(TargetFramework.StartsWith('net5')) 
+				   OR $(TargetFramework.StartsWith('net6')) 
+				   OR $(TargetFramework.StartsWith('net7')) 
+				   OR $(TargetFramework.StartsWith('net8')) ">
+		<DefineConstants>DRAWING;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" $(TargetFramework.StartsWith('net5')) 
+				   OR $(TargetFramework.StartsWith('net6')) 
+				   OR $(TargetFramework.StartsWith('net7')) 
+				   OR $(TargetFramework.StartsWith('net8')) ">
+		<DefineConstants>NET5_0_OR_GREATER2;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac20')) 
+				   OR $(TargetFramework.Contains('-macos')) 
+				   OR $(TargetFramework.Contains('-maccatalyst'))">
+		<DefineConstants>XAMARIN_MAC;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard2')) 
+				   OR $(TargetFramework.EndsWith('net5.0')) 
+				   OR $(TargetFramework.EndsWith('net6.0')) 
+				   OR $(TargetFramework.EndsWith('net7.0')) 
+				   OR $(TargetFramework.EndsWith('net8.0')) 
+				   OR '$(TargetFramework)' == 'net461' ">
+		<DefineConstants>MONO_MAC;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" $(TargetFramework.Contains('-windows'))">
+		<DefineConstants>NET_WINDOWS;$(DefineConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup Condition=" $(DefineConstants.Contains('MONO_MAC')) ">
+		<PackageReference Include="MonoMac.NetStandard" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" $(DefineConstants.Contains('DRAWING')) ">
+		<PackageReference Include="System.Drawing.Common" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" $(DefineConstants.Contains('__LIB_SYS_OS2__')) ">
+		<PackageReference Include="OperatingSystem2" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" !$(DefineConstants.Contains('XAMARIN_MAC')) 
+			   AND !$(TargetFramework.Contains('windows')) 
+			   AND !$(TargetFramework.Contains('macos')) 
+			   AND !$(TargetFramework.Contains('maccatalyst'))
+			   AND !$(TargetFramework.StartsWith('netstandard1')) 
+			   AND '$(TargetFramework)' != 'net35' 
+			   AND '$(TargetFramework)' != 'net40' 
+			   AND '$(TargetFramework)' != 'net45' ">
+		<PackageReference Include="GtkSharp" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+		<Reference Include="WindowsBase" />
+		<Reference Include="PresentationCore" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+		<Reference Include="PresentationCore" />
+	</ItemGroup>
+</Project>
