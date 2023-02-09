@@ -37,6 +37,9 @@ jobs:
       - name: Verify dotnet info
         run: dotnet --info
 
+      - name: dotnet restore NotifyIcon.sln
+        run: dotnet restore ./NotifyIcon.sln
+
       - name: Test
         shell: pwsh
         run: dotnet test -c Release
