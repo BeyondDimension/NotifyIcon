@@ -13,9 +13,5 @@
     <ProjectReference Include="..\NotifyIcon.Platform\NotifyIcon.Platform.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="GtkSharp" />
-  </ItemGroup>
-
   <Import Project="..\GeneratePackage.props" />
 </Project>
