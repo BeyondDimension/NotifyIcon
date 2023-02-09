@@ -15,6 +15,7 @@
 		<Authors>$(Company)</Authors>
 		<FileVersion>$(Version)</FileVersion>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<SkipGtkInstall>true</SkipGtkInstall>
 	</PropertyGroup>
 
 	<ItemGroup>
