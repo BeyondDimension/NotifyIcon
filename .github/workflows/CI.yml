@@ -28,8 +28,11 @@ jobs:
         with:
           dotnet-version: 7.0.x
 
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Install macOS SDK
+        run: dotnet workload install macos
+
+      - name: Restore Workload
+        run: dotnet workload restore
 
       - name: Verify dotnet info
         run: dotnet --info
@@ -58,19 +61,22 @@ jobs:
             PackageId: "NotifyIcon.Linux"
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: recursive
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 7.0.x
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          submodules: recursive
+      - name: Install macOS SDK
+        run: dotnet workload install macos
+
+      - name: Restore Workload
+        run: dotnet workload restore
 
       - name: Verify dotnet info
         run: dotnet --info

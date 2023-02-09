@@ -8,9 +8,11 @@
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 		<ImplicitUsings>false</ImplicitUsings>
 		<!--<IsTrimmable>true</IsTrimmable>-->
-		<Version>1.23.10207.11603</Version>
-		<Copyright>©️ 长沙次元超越科技有限公司. All rights reserved.</Copyright>
+		<Version>1.23.10209.11223</Version>
+		<PackageIconUrl>https://avatars.githubusercontent.com/u/79355691?s=200&amp;v=4</PackageIconUrl>
 		<Company>长沙次元超越科技有限公司</Company>
+		<Copyright>©️ $(Company). All rights reserved.</Copyright>
+		<Authors>$(Company)</Authors>
 		<FileVersion>$(Version)</FileVersion>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 	</PropertyGroup>
