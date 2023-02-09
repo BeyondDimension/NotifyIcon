@@ -21,9 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OperatingSystem2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    <PackageReference Include="MonoMac.NetStandard" />
   </ItemGroup>
 
 </Project>

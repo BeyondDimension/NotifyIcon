@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <PackageReference Include="ReactiveUI" />
-    <PackageReference Include="OperatingSystem2" />
   </ItemGroup>
 
   <ItemGroup>

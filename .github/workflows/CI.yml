@@ -28,8 +28,23 @@ jobs:
         with:
           dotnet-version: 7.0.x
 
+      - name: Install Android SDK
+        run: dotnet workload install android
+
+      - name: Install iOS SDK
+        run: dotnet workload install ios
+
       - name: Install macOS SDK
         run: dotnet workload install macos
+
+      - name: Install Mac Catalyst SDK
+        run: dotnet workload install maccatalyst
+
+      - name: Install Maui
+        run: dotnet workload install maui
+
+      - name: Install wasm-tools
+        run: dotnet workload install wasm-tools
 
       - name: Restore Workload
         run: dotnet workload restore
@@ -75,8 +90,23 @@ jobs:
         with:
           dotnet-version: 7.0.x
 
+      - name: Install Android SDK
+        run: dotnet workload install android
+
+      - name: Install iOS SDK
+        run: dotnet workload install ios
+
       - name: Install macOS SDK
         run: dotnet workload install macos
+
+      - name: Install Mac Catalyst SDK
+        run: dotnet workload install maccatalyst
+
+      - name: Install Maui
+        run: dotnet workload install maui
+
+      - name: Install wasm-tools
+        run: dotnet workload install wasm-tools
 
       - name: Restore Workload
         run: dotnet workload restore
